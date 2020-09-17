@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:textSize="20sp"
-                    android:text="Schedule Meeting"
+                    android:text="Add Call"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

@@ -29,27 +29,6 @@ public class TaskFragment extends BottomSheetDialogFragment {
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
 
-        ArrayList<String> mArrayList = new ArrayList( Arrays.asList( new String[]{"Jasim", "Hasan", "Mamun", "Monir", "Yousuf"} ) );
-        ChipGroup mChipGroup = view.findViewById(R.id.tag_group);
-        for (int index = 0; index < mArrayList.size(); index++) {
-            String tagName = mArrayList.get(index);
-            Chip chip = new Chip(getActivity());
-            int paddingDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-            chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
-            chip.setText(tagName);
-            chip.setCloseIconResource(R.drawable.ic_baseline_close_24);
-            chip.setCloseIconEnabled(true);
-            //Added click listener on close icon to remove tag from ChipGroup
-            chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mArrayList.remove(tagName);
-                    mChipGroup.removeView(chip);
-                }
-            });
-            mChipGroup.addView(chip);
-        }
-
         return view;
     }
 

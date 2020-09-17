@@ -8,4 +8,18 @@
         <item>Food Lab Classic Ltd.</item>
     </string-array>
 
+    <string-array name="task_priority_array">
+        <item>Select Priority</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
+
+    <string-array name="task_status_array">
+        <item>Select Status</item>
+        <item>Personal</item>
+        <item>Client</item>
+        <item>Boss</item>
+    </string-array>
+
 </resources>

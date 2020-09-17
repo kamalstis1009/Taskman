@@ -24,7 +24,7 @@ public class CallFragment extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_meeting, container, false);
+        View view = inflater.inflate(R.layout.fragment_call, container, false);
 
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}

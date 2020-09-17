@@ -30,36 +30,27 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:textSize="20sp"
-                    android:text="Add Task"
+                    android:text="Schedule Meeting"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_user_birth_date"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <Spinner
+                android:id="@+id/call_type"
+                android:entries="@array/call_type_array"
+                android:background="@drawable/layer_list_spinner"
+                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/user_birth"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:hint="DD-MM-YYYY"
-                    android:drawableTint="@color/colorDeepGrey"
-                    android:drawableEnd="@drawable/ic_call_black_24dp"
-                    android:background="@drawable/shape_radius_100_edit_text"
-                    android:layout_marginBottom="10dp"
-                    android:paddingStart="25dp"
-                    android:paddingEnd="25dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                android:layout_height="wrap_content"/>
 
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:cursorVisible="false"
-                    android:focusableInTouchMode="false"/>
-            </com.google.android.material.textfield.TextInputLayout>
+            <Spinner
+                android:id="@+id/client"
+                android:entries="@array/client_array"
+                android:background="@drawable/layer_list_spinner"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_user_phone_number"
@@ -75,7 +66,7 @@
                     android:inputType="text"
                     android:maxLength="25"
                     android:singleLine="true"
-                    android:hint="Task Title"
+                    android:hint="Subject"
                     android:drawableTint="@color/colorDeepGrey"
                     android:drawableEnd="@drawable/ic_call_black_24dp"
                     android:background="@drawable/shape_radius_100_edit_text"
@@ -86,64 +77,25 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_product_description"
-                style="@style/OutlinedRoundedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/product_description"
-                    android:gravity="top"
-                    android:hint="Description"
-                    android:inputType="text|textMultiLine"
-                    android:layout_marginBottom="10dp"
-                    android:paddingStart="25dp"
-                    android:paddingEnd="25dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
             <Spinner
-                android:id="@+id/task_priority"
-                android:entries="@array/task_priority_array"
+                android:id="@+id/call_purpose"
+                android:entries="@array/call_purpose_array"
                 android:background="@drawable/layer_list_spinner"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <Spinner
-                android:id="@+id/task_status"
-                android:entries="@array/task_status_array"
+                android:id="@+id/call_result"
+                android:entries="@array/call_result_array"
                 android:background="@drawable/layer_list_spinner"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
-            <LinearLayout
-                android:layout_marginBottom="15dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageButton
-                    android:background="@drawable/shape_radius_100_pad_10_solid_red"
-                    android:tint="@color/colorWhite"
-                    android:src="@drawable/ic_baseline_attach_file_24"
-                    android:rotation="35"
-                    android:layout_marginEnd="5dp"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp" />
-                <ImageButton
-                    android:background="@drawable/shape_radius_100_pad_10_solid_red"
-                    android:tint="@color/colorWhite"
-                    android:src="@drawable/ic_baseline_fiber_manual_record_24"
-                    android:layout_marginEnd="5dp"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp" />
-            </LinearLayout>
 
             <Button
                 android:id="@+id/add_product_button"
-                android:text="Add Task"
+                android:text="Add Meeting"
                 android:textColor="@color/colorWhite"
                 app:cornerRadius="25dp"
                 android:padding="15dp"

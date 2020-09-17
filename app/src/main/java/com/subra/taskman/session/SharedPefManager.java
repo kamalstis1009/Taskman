@@ -65,28 +65,28 @@ public class SharedPefManager {
     }*/
 
     //===============================================| Your Product
-    /*public void saveYouProduct(Product model){
+    public void saveMeetingModels(MeetingModel model){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        ArrayList<Product> mArrayList = new ArrayList<>();
-        ArrayList<Product> products = getProduct();
+        ArrayList<MeetingModel> mArrayList = new ArrayList<>();
+        ArrayList<MeetingModel> products = getMeetingModels();
         if (products != null) {
             if (model != null) {
                 products.add(model);
-                editor.putString("YourProduct", new Gson().toJson(products));
+                editor.putString("MeetingModel", new Gson().toJson(products));
             }
         } else {
             mArrayList.add(model);
-            editor.putString("YourProduct", new Gson().toJson(mArrayList));
+            editor.putString("MeetingModel", new Gson().toJson(mArrayList));
         }
         editor.apply();
         editor.commit(); //for old version
     }
-    public ArrayList<Product> getYourProduct(){
+    public ArrayList<MeetingModel> getMeetingModels(){
         SharedPreferences ref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return new Gson().fromJson(ref.getString("YourProduct", null), new TypeToken<ArrayList<Product>>(){}.getType());
-    }*/
+        return new Gson().fromJson(ref.getString("MeetingModel", null), new TypeToken<ArrayList<MeetingModel>>(){}.getType());
+    }
 
     //===============================================| MeetingModel
     public void saveMeetingModel(ArrayList<MeetingModel> mArrayList){
@@ -116,7 +116,7 @@ public class SharedPefManager {
     public void removeAllMeetingModel(){
         SharedPreferences pre = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pre.edit();
-        editor.remove("CartModel");
+        editor.remove("MeetingModel");
         //editor.clear(); //Remove from login.xml file
         editor.apply();
         editor.commit(); //for old version

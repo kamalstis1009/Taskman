@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +22,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.subra.taskman.R;
+import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.session.SharedPefManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +37,16 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
 
+        //------------------------------------------------| findViewById()
+        EditText mTitle = (EditText) view.findViewById(R.id.meeting_title);
+        Spinner mClient = (Spinner) view.findViewById(R.id.meeting_client);
+        EditText mDate = (EditText) view.findViewById(R.id.meeting_date);
+        ChipGroup mChipGroup = (ChipGroup) view.findViewById(R.id.meeting_participants);
+        EditText mLocation = (EditText) view.findViewById(R.id.meeting_location);
+        EditText mDescription = (EditText) view.findViewById(R.id.meeting_description);
+
+        //------------------------------------------------| Participants
         ArrayList<String> mArrayList = new ArrayList( Arrays.asList( new String[]{"Jasim", "Hasan", "Mamun", "Monir", "Yousuf"} ) );
-        ChipGroup mChipGroup = view.findViewById(R.id.tag_group);
         for (int index = 0; index < mArrayList.size(); index++) {
             String tagName = mArrayList.get(index);
             Chip chip = new Chip(getActivity());
@@ -52,6 +65,27 @@ public class MeetingFragment extends BottomSheetDialogFragment {
             });
             mChipGroup.addView(chip);
         }
+
+        ((Button) view.findViewById(R.id.add_product_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String title = mTitle.getText().toString().trim();
+                String client = mClient.getSelectedItem().toString();
+                String date = mDate.getText().toString().trim();
+                String location = mLocation.getText().toString().trim();
+                String description = mDescription.getText().toString().trim();
+
+                MeetingModel model = new MeetingModel();
+                model.setTitle(title);
+                model.setClient(client);
+                model.setDate(date);
+                model.setLocation(location);
+                model.setRemarks(description);
+                model.setParticipants(mArrayList);
+
+                SharedPefManager.getInstance(getActivity()).saveMeetingModels(model);
+            }
+        });
 
         ((ImageButton) view.findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
             @Override

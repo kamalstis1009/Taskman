@@ -39,7 +39,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_user_phone_number"
+                android:id="@+id/layout_meeting_title"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxCornerRadiusTopStart="25dp"
                 app:boxCornerRadiusTopEnd="25dp"
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/user_name"
+                    android:id="@+id/meeting_title"
                     android:inputType="text"
                     android:maxLength="25"
                     android:singleLine="true"
@@ -64,7 +64,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
-                android:id="@+id/product_category"
+                android:id="@+id/meeting_client"
                 android:entries="@array/client_array"
                 android:background="@drawable/layer_list_spinner"
                 android:layout_marginBottom="10dp"
@@ -72,12 +72,12 @@
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_user_birth_date"
+                android:id="@+id/layout_meeting_date"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/user_birth"
+                    android:id="@+id/meeting_date"
                     android:inputType="text"
                     android:singleLine="true"
                     android:hint="DD-MM-YYYY"
@@ -97,7 +97,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/tag_group"
+                android:id="@+id/meeting_participants"
                 android:layout_marginBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -107,13 +107,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_user_address"
+                    android:id="@+id/layout_meeting_location"
                     android:layout_centerInParent="true"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:id="@+id/user_address"
+                        android:id="@+id/meeting_location"
                         android:inputType="text"
                         android:singleLine="true"
                         android:hint="Location"
@@ -138,12 +138,12 @@
             </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_product_description"
+                android:id="@+id/layout_meeting_description"
                 style="@style/OutlinedRoundedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/product_description"
+                    android:id="@+id/meeting_description"
                     android:gravity="top"
                     android:hint="Description"
                     android:inputType="text|textMultiLine"

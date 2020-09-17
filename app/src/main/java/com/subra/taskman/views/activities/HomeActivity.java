@@ -13,7 +13,9 @@ import com.subra.taskman.R;
 import com.subra.taskman.views.adapters.CallAdapter;
 import com.subra.taskman.views.adapters.MeetingAdapter;
 import com.subra.taskman.views.adapters.TaskAdapter;
+import com.subra.taskman.views.fragments.CallFragment;
 import com.subra.taskman.views.fragments.MeetingFragment;
+import com.subra.taskman.views.fragments.TaskFragment;
 
 import java.util.Calendar;
 
@@ -75,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         ((ImageButton) findViewById(R.id.add_task_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MeetingFragment mDialog = new MeetingFragment();
+                TaskFragment mDialog = new TaskFragment();
                 //mDialog.setArguments(bundle);
                 mDialog.setCancelable(false);
                 mDialog.show(getSupportFragmentManager(), mDialog.getTag());
@@ -88,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         ((ImageButton) findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MeetingFragment mDialog = new MeetingFragment();
+                CallFragment mDialog = new CallFragment();
                 //mDialog.setArguments(bundle);
                 mDialog.setCancelable(false);
                 mDialog.show(getSupportFragmentManager(), mDialog.getTag());

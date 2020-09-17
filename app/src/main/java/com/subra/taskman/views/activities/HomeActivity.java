@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.subra.taskman.R;
+import com.subra.taskman.views.adapters.CallAdapter;
 import com.subra.taskman.views.adapters.MeetingAdapter;
+import com.subra.taskman.views.adapters.TaskAdapter;
 import com.subra.taskman.views.fragments.MeetingFragment;
 
 import java.util.Calendar;
@@ -69,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //-----------------------------------------------| Task
         RecyclerView mRecyclerView2 = (RecyclerView) findViewById(R.id.recycler_view_task);
-        initRecyclerView(mRecyclerView2);
+        initRecyclerView2(mRecyclerView2);
         ((ImageButton) findViewById(R.id.add_task_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //-----------------------------------------------| Call
         RecyclerView mRecyclerView3 = (RecyclerView) findViewById(R.id.recycler_view_call);
-        initRecyclerView(mRecyclerView3);
+        initRecyclerView3(mRecyclerView3);
         ((ImageButton) findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +98,24 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initRecyclerView(RecyclerView mRecyclerView) {
         MeetingAdapter mAdapter = new MeetingAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void initRecyclerView2(RecyclerView mRecyclerView) {
+        TaskAdapter mAdapter = new TaskAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void initRecyclerView3(RecyclerView mRecyclerView) {
+        CallAdapter mAdapter = new CallAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

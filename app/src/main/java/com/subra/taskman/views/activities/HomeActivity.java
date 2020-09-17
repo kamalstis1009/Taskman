@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.subra.taskman.R;
+import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.session.SharedPefManager;
 import com.subra.taskman.views.adapters.CallAdapter;
 import com.subra.taskman.views.adapters.MeetingAdapter;
 import com.subra.taskman.views.adapters.TaskAdapter;
@@ -17,6 +19,7 @@ import com.subra.taskman.views.fragments.CallFragment;
 import com.subra.taskman.views.fragments.MeetingFragment;
 import com.subra.taskman.views.fragments.TaskFragment;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
@@ -99,12 +102,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(RecyclerView mRecyclerView) {
-        MeetingAdapter mAdapter = new MeetingAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
-        mAdapter.notifyDataSetChanged();
+        ArrayList<MeetingModel> list = SharedPefManager.getInstance(this).getMeetingModels();
+        if (list != null && list.size() > 0) {
+            MeetingAdapter mAdapter = new MeetingAdapter(this, SharedPefManager.getInstance(this).getMeetingModels());
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initRecyclerView2(RecyclerView mRecyclerView) {

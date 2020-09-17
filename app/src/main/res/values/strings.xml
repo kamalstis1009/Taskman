@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Taskman</string>
+
+    <string-array name="category_array">
+        <item>Select Client</item>
+        <item>Subra Systems Ltd.</item>
+        <item>Amulet Pharmacy Ltd.</item>
+        <item>Food Lab Classic Ltd.</item>
+    </string-array>
+
+</resources>

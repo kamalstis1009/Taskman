@@ -29,7 +29,7 @@ public class CallFragment extends BottomSheetDialogFragment {
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
 
-        ArrayList<String> mArrayList = new ArrayList( Arrays.asList( new String[]{"ace", "boom", "crew", "dog", "eon"} ) );
+        ArrayList<String> mArrayList = new ArrayList( Arrays.asList( new String[]{"Jasim", "Hasan", "Mamun", "Monir", "Yousuf"} ) );
         ChipGroup mChipGroup = view.findViewById(R.id.tag_group);
         for (int index = 0; index < mArrayList.size(); index++) {
             String tagName = mArrayList.get(index);

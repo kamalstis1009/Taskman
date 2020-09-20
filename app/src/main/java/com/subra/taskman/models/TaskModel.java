@@ -12,6 +12,8 @@ public class TaskModel {
     private ArrayList<String> participants;
     private String fileName;
     private String filePath;
+    private String recordFileName;
+    private String recordFilePath;
 
     public String getTitle() {
         return title;
@@ -75,5 +77,21 @@ public class TaskModel {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getRecordFileName() {
+        return recordFileName;
+    }
+
+    public void setRecordFileName(String recordFileName) {
+        this.recordFileName = recordFileName;
+    }
+
+    public String getRecordFilePath() {
+        return recordFilePath;
+    }
+
+    public void setRecordFilePath(String recordFilePath) {
+        this.recordFilePath = recordFilePath;
     }
 }

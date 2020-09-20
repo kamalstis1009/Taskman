@@ -5,6 +5,14 @@ public class FileModel {
     private String fileName;
     private String filePath;
 
+    public FileModel() {
+    }
+
+    public FileModel(String fileName, String filePath) {
+        this.fileName = fileName;
+        this.filePath = filePath;
+    }
+
     public String getFileName() {
         return fileName;
     }

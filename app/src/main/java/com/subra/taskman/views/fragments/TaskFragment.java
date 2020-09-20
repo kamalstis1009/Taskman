@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
 import com.subra.taskman.R;
 import com.subra.taskman.models.FileModel;
 import com.subra.taskman.models.MeetingModel;
@@ -60,6 +61,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class TaskFragment extends BottomSheetDialogFragment implements EasyPermissions.PermissionCallbacks, AttachmentAdapter.MyCallBackListener, RecordAdapter.MyCallBackListener {
 
+    private static final String TAG = "TaskFragment";
     private BottomSheetListener mListener;
 
     public interface BottomSheetListener {
@@ -90,7 +92,8 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
-    private String mFilePath;
+    private String mRecordName;
+    private String mRecordFilePath;
     private boolean isStarted;
     private MediaRecorder mRecorder;
 
@@ -228,7 +231,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     }
 
     private void initRecyclerView2(RecyclerView mRecyclerView, ArrayList<FileModel> arrayList) {
-        mRecordAdapter = new RecordAdapter(arrayList, this);
+        mRecordAdapter = new RecordAdapter(getActivity(), arrayList, this);
         mRecyclerView.setAdapter(mRecordAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -276,9 +279,8 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         TextView timer = (TextView) view.findViewById(R.id.record_timer);
         ImageButton recordBtn = (ImageButton) view.findViewById(R.id.record_button);
         ImageButton stopBtn = (ImageButton) view.findViewById(R.id.stop_button);
-        ImageButton playBtn = (ImageButton) view.findViewById(R.id.play_button);
         stopBtn.setEnabled(false);
-        playBtn.setEnabled(false);
+        //playBtn.setEnabled(false);
 
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,25 +302,9 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                 new BackTask().execute("stop");
                 recordBtn.setEnabled(true);
                 stopBtn.setEnabled(false);
-                playBtn.setEnabled(true);
+                //playBtn.setEnabled(true);
                 TimeCount.getInstance().stopCounter();
                 dialog.dismiss();
-            }
-        });
-        playBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaPlayer mPlayer = new MediaPlayer();
-                try {
-                    if (mFilePath != null) {
-                        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        mPlayer.setDataSource(getActivity(), Uri.parse(mFilePath));
-                        mPlayer.prepare();
-                        mPlayer.start();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
         ((ImageButton) view.findViewById(R.id.close_button)).setOnClickListener(new View.OnClickListener() {
@@ -330,14 +316,14 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     }
 
     //===============================================| Recording Task
-    class BackTask extends AsyncTask<String, Void, Void> {
+    private class BackTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
             if (params[0].equals("start")) {
                 try {
                     String path = getActivity().getFilesDir().getPath();
                     File file = new File(path);
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    mRecordName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
                     mRecorder = new MediaRecorder();
                     /*mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
@@ -355,8 +341,8 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                     if (!file.exists()){
                         file.mkdirs();
                     }
-                    mFilePath = file+"/" + "REC_" + timeStamp + ".3gp";
-                    mRecorder.setOutputFile(mFilePath);
+                    mRecordFilePath = file+"/" + "REC_" + mRecordName + ".3gp";
+                    mRecorder.setOutputFile(mRecordFilePath);
 
                     mRecorder.prepare();
                     mRecorder.start();
@@ -372,9 +358,40 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                     mRecorder.release();
                     mRecorder = null;
                     isStarted = false;
+
+                    if (mRecordName != null && mRecordFilePath != null) {
+                        FileModel model = new FileModel(mRecordName, mRecordFilePath);
+                        mRecordList.add(model);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getInternalStorageFiles();
+                            }
+                        });
+
+                    }
                 }
             }
             return null;
+        }
+    }
+
+    //===============================================| Get all records file from Storage
+    private void getInternalStorageFiles() {
+        //String path = Environment.getExternalStorageDirectory().toString() + "/Testing"; //getExternalFilesDir(), getExternalCacheDir(), or getExternalMediaDir()
+        //String path = this.getApplicationContext().getFilesDir() + "/system_sound"; //file.getAbsolutePath()
+        //String[] listOfFiles = Environment.getExternalStoragePublicDirectory (Environment.DIRECTORY_DOWNLOADS).list();
+
+        String path = getActivity().getFilesDir().getPath();
+        String[] listOfFiles = getActivity().getFilesDir().list();
+        Log.d(TAG, "Files: " + new Gson().toJson(listOfFiles));
+        if (listOfFiles != null) {
+            for (String fileName : listOfFiles) {
+                mRecordList.add(new FileModel(fileName, path));
+            }
+        }
+        if (mRecordList != null && mRecordList.size() > 0) {
+            initRecyclerView2(mRecordRecyclerView, mRecordList);
         }
     }
 

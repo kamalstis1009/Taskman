@@ -1,6 +1,7 @@
 package com.subra.taskman.views.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -30,6 +31,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MeetingFragment extends BottomSheetDialogFragment {
+
+    private BottomSheetListener mListener;
+
+    public interface BottomSheetListener {
+        void onAddItem(MeetingModel model);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,6 +98,8 @@ public class MeetingFragment extends BottomSheetDialogFragment {
                     model.setParticipants(mArrayList);
                     model.setRemarks(description);
                     model.setUserId(mUser.getUserId());
+
+                    mListener.onAddItem(model);
                 }
             }
         });
@@ -103,6 +112,16 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (BottomSheetListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement BottomSheetListener");
+        }
     }
 
     //===============================================| Remove modal dialog background scrim grey color

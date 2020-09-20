@@ -49,7 +49,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHo
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onRemoveItem(position, model);
+                if(holder.button.isChecked()) {
+                    mListener.onRemoveItem(position, model);
+                }
             }
         });
     }

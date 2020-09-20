@@ -26,7 +26,7 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
-public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener {
+public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener {
 
     private RecyclerView mMeetingRecyclerView;
     private ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
@@ -134,11 +134,6 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         mAdapter.notifyDataSetChanged();
     }
 
-    public void onAddItem(MeetingModel model) {
-        mMeetingList.add(model);
-        mMeetingAdapter.notifyItemInserted(mMeetingList.size());
-    }
-
     @Override
     public void onRemoveItem(int position, MeetingModel model) {
         if (mMeetingList != null && mMeetingList.size() > 0) {
@@ -148,5 +143,11 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
             mMeetingAdapter.notifyItemRemoved(position);
             mMeetingAdapter.notifyItemRangeChanged(position, mMeetingList.size());
         }
+    }
+
+    @Override
+    public void onAddItem(MeetingModel model) {
+        mMeetingList.add(model);
+        mMeetingAdapter.notifyItemInserted(mMeetingList.size());
     }
 }

@@ -53,8 +53,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class TaskFragment extends BottomSheetDialogFragment implements AttachmentAdapter.MyCallBackListener, RecordAdapter.MyCallBackListener {
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class TaskFragment extends BottomSheetDialogFragment implements EasyPermissions.PermissionCallbacks, AttachmentAdapter.MyCallBackListener, RecordAdapter.MyCallBackListener {
 
     private BottomSheetListener mListener;
 
@@ -81,6 +85,11 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
     private String currentPhotoPath;
 
     //Record
+    private String[] PERMISSIONS = {
+            android.Manifest.permission.RECORD_AUDIO,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
     private String mFilePath;
     private boolean isStarted;
     private MediaRecorder mRecorder;
@@ -167,11 +176,12 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
                     showDialog();
                     break;
                 case R.id.add_record_button :
-                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    /*if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[] {Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD);
                     } else {
                         showRecordDialog();
-                    }
+                    }*/
+                    requestPermissions();
                     break;
                 case R.id.add_task_button :
                     //mListener.onAddItem(model);
@@ -227,6 +237,34 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
     }
 
     //====================================================| For Record
+    @AfterPermissionGranted(REQUEST_RECORD)
+    private void requestPermissions() {
+        if (EasyPermissions.hasPermissions(getActivity(), PERMISSIONS)) {
+            // Already have permission, do the thing
+            showRecordDialog();
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, "This app needs access to your camera and mic to make video calls", REQUEST_RECORD, PERMISSIONS);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        // Some permissions have been granted
+        showRecordDialog();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        // Some permissions have been denied
+    }
+
     private void showRecordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_record, null, false);
@@ -424,7 +462,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         }
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -436,7 +474,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         if (requestCode == REQUEST_RECORD) {
             showRecordDialog();
         }
-    }
+    }*/
 
 
 }

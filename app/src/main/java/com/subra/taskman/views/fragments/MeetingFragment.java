@@ -136,7 +136,7 @@ public class MeetingFragment extends BottomSheetDialogFragment {
                 model.setClient(client);
                 model.setFromDate(fromDate);
                 model.setToDate(toDate);
-                model.setLocation(location);
+                model.setLocation(String.valueOf(mLatLng));
                 model.setParticipants(mArrayList);
                 model.setRemarks(description);
                 //model.setUserId(mUser.getUserId());

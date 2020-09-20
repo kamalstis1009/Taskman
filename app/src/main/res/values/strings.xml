@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Taskman</string>
+    <string name="app_name">Subra CRM</string>
 
     <!-- ProgressDialog -->
     <string name="progress">Please wait…</string>
@@ -20,16 +20,20 @@
 
     <string-array name="task_priority_array">
         <item>Select Priority</item>
+        <item>Normal</item>
+        <item>Highest</item>
         <item>High</item>
-        <item>Medium</item>
         <item>Low</item>
+        <item>Lowest</item>
     </string-array>
 
     <string-array name="task_status_array">
         <item>Select Status</item>
-        <item>Personal</item>
-        <item>Client</item>
-        <item>Boss</item>
+        <item>Not Started</item>
+        <item>Deferred</item>
+        <item>In Progress</item>
+        <item>Completed</item>
+        <item>Waiting for Input</item>
     </string-array>
 
     <string-array name="call_type_array">

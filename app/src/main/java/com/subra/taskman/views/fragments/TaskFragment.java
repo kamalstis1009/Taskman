@@ -43,6 +43,7 @@ import com.subra.taskman.models.FileModel;
 import com.subra.taskman.models.MeetingModel;
 import com.subra.taskman.utils.ConstantKey;
 import com.subra.taskman.utils.PermissionUtils;
+import com.subra.taskman.utils.TimeCount;
 import com.subra.taskman.utils.Utility;
 import com.subra.taskman.views.adapters.AttachmentAdapter;
 import com.subra.taskman.views.adapters.RecordAdapter;
@@ -247,6 +248,12 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
                 new BackTask().execute("start");
                 recordBtn.setEnabled(false);
                 stopBtn.setEnabled(true);
+                TimeCount.getInstance().getCounter(new TimeCount.ShowCounter() {
+                    @Override
+                    public void onCallback(int value) {
+                        timer.setText("" + value + " Seconds");
+                    }
+                });
             }
         });
         stopBtn.setOnClickListener(new View.OnClickListener() {
@@ -256,6 +263,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
                 recordBtn.setEnabled(true);
                 stopBtn.setEnabled(false);
                 playBtn.setEnabled(true);
+                TimeCount.getInstance().stopCounter();
             }
         });
         playBtn.setOnClickListener(new View.OnClickListener() {

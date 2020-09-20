@@ -1,20 +1,17 @@
 package com.subra.taskman.models;
 
+import java.util.ArrayList;
+
 public class TaskModel {
 
-    private String date;
     private String title;
+    private String date;
     private String description;
     private String status;
     private String priority;
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
+    private ArrayList<String> participants;
+    private String fileName;
+    private String filePath;
 
     public String getTitle() {
         return title;
@@ -22,6 +19,14 @@ public class TaskModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getDescription() {
@@ -46,5 +51,29 @@ public class TaskModel {
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+    public ArrayList<String> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(ArrayList<String> participants) {
+        this.participants = participants;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

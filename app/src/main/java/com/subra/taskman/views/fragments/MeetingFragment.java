@@ -65,7 +65,9 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         }
 
         //------------------------------------------------| Get Bundle Data
-        if (getArguments() != null && getArguments().getString("mDuration") != null) {}
+        if (getArguments() != null && getArguments().getString("mDuration") != null) {
+            //
+        }
 
         //------------------------------------------------| findViewById()
         EditText mTitle = (EditText) view.findViewById(R.id.meeting_title);

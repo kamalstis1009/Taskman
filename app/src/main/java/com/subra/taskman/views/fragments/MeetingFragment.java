@@ -128,7 +128,7 @@ public class MeetingFragment extends BottomSheetDialogFragment {
                 String client = mClient.getSelectedItem().toString();
                 String fromDate = mFromDate.getText().toString().trim();
                 String toDate = mToDate.getText().toString().trim();
-                String location = mLocation.getText().toString().trim();
+                //String location = mLocation.getText().toString().trim();
                 String description = mDescription.getText().toString().trim();
 
                 MeetingModel model = new MeetingModel();

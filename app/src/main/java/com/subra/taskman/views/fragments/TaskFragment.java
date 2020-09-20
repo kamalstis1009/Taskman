@@ -302,6 +302,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                 stopBtn.setEnabled(false);
                 playBtn.setEnabled(true);
                 TimeCount.getInstance().stopCounter();
+                dialog.dismiss();
             }
         });
         playBtn.setOnClickListener(new View.OnClickListener() {

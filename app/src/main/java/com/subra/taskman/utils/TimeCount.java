@@ -44,7 +44,7 @@ public class TimeCount {
                 handler.post(new Runnable() {
                     public void run() {
                         try {
-                            count = 0;
+                            //count = 0;
                             myCallback.onCallback(count);
                             count ++;
                         } catch (Exception e) {

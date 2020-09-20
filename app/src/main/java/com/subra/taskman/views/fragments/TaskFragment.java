@@ -180,11 +180,6 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                     showDialog();
                     break;
                 case R.id.add_record_button :
-                    /*if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[] {Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD);
-                    } else {
-                        showRecordDialog();
-                    }*/
                     requestPermissions();
                     break;
                 case R.id.add_task_button :

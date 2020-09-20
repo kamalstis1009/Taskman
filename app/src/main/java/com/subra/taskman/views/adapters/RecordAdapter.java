@@ -1,8 +1,6 @@
 package com.subra.taskman.views.adapters;
 
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

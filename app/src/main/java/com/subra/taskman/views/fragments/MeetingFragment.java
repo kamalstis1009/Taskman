@@ -113,6 +113,7 @@ public class MeetingFragment extends BottomSheetDialogFragment {
                         if (!TextUtils.isEmpty(email)) {
                             Chip chip = addChip(email);
                             mChipGroup.addView(chip);
+                            mArrayList.add(email);
                         }
                         dialog.dismiss();
                     }
@@ -159,7 +160,7 @@ public class MeetingFragment extends BottomSheetDialogFragment {
                 model.setClient(client);
                 model.setFromDate(fromDate);
                 model.setToDate(toDate);
-                model.setLocation(String.valueOf(mLatLng));
+                model.setLocation(mLatLng.latitude + "," + mLatLng.longitude);
                 model.setParticipants(mArrayList);
                 model.setRemarks(description);
                 //model.setUserId(mUser.getUserId());

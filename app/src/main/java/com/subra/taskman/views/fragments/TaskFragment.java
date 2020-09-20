@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -121,7 +122,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
         //-----------------------------------------------| Record
         mRecordRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_record);
-        initRecyclerView2(mRecordRecyclerView, mRecordList);
+        getInternalStorageFiles();
 
         return view;
     }
@@ -212,12 +213,20 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
     @Override
     public void onRemoveRecord(int position, FileModel model) {
-        if (mRecordList != null && mRecordList.size() > 0) {
-            //mArrayList.remove(model);
-            mRecordList.remove(position);
-            mRecordRecyclerView.removeViewAt(position);
-            mRecordAdapter.notifyItemRemoved(position);
-            mRecordAdapter.notifyItemRangeChanged(position, mRecordList.size());
+        File file = new File(model.getFilePath()+"/"+model.getFileName());
+        if (file.exists()) {
+            if (file.delete()) {
+                Toast.makeText(getActivity(), "Deleted the file successfully", Toast.LENGTH_SHORT).show();
+                if (mRecordList != null && mRecordList.size() > 0) {
+                    //mArrayList.remove(model);
+                    mRecordList.remove(position);
+                    mRecordRecyclerView.removeViewAt(position);
+                    mRecordAdapter.notifyItemRemoved(position);
+                    mRecordAdapter.notifyItemRangeChanged(position, mRecordList.size());
+                }
+            } else {
+                Toast.makeText(getActivity(), "Did not delete this file " + model.getFileName(), Toast.LENGTH_SHORT).show();
+            };
         }
     }
 

@@ -54,7 +54,7 @@
                     android:singleLine="true"
                     android:hint="Title"
                     android:drawableTint="@color/colorDeepGrey"
-                    android:drawableEnd="@drawable/ic_call_black_24dp"
+                    android:drawableEnd="@drawable/ic_baseline_title_24"
                     android:background="@drawable/shape_radius_100_edit_text"
                     android:layout_marginBottom="10dp"
                     android:paddingStart="25dp"

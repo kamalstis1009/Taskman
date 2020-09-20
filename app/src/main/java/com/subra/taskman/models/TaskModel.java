@@ -10,10 +10,8 @@ public class TaskModel {
     private String status;
     private String priority;
     private ArrayList<String> participants;
-    private String fileName;
-    private String filePath;
-    private String recordFileName;
-    private String recordFilePath;
+    private ArrayList<FileModel> attachments;
+    private ArrayList<FileModel> records;
 
     public String getTitle() {
         return title;
@@ -63,35 +61,19 @@ public class TaskModel {
         this.participants = participants;
     }
 
-    public String getFileName() {
-        return fileName;
+    public ArrayList<FileModel> getAttachments() {
+        return attachments;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setAttachments(ArrayList<FileModel> attachments) {
+        this.attachments = attachments;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public ArrayList<FileModel> getRecords() {
+        return records;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getRecordFileName() {
-        return recordFileName;
-    }
-
-    public void setRecordFileName(String recordFileName) {
-        this.recordFileName = recordFileName;
-    }
-
-    public String getRecordFilePath() {
-        return recordFilePath;
-    }
-
-    public void setRecordFilePath(String recordFilePath) {
-        this.recordFilePath = recordFilePath;
+    public void setRecords(ArrayList<FileModel> records) {
+        this.records = records;
     }
 }

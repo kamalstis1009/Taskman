@@ -375,7 +375,7 @@ public class Utility {
     }
 
     //-----------------------------------------------| Change position of current location icon
-    public void changeCurrentLocationIcon(SupportMapFragment mapFragment) {
+    /*public void changeCurrentLocationIcon(SupportMapFragment mapFragment) {
         if (mapFragment != null) {
             ImageView btnMyLocation = (ImageView) ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
             btnMyLocation.setImageResource(R.drawable.selector_my_location);
@@ -386,7 +386,7 @@ public class Utility {
             layoutParams.setMargins(0, 0, 30, 30);
             btnMyLocation.setLayoutParams(layoutParams);
         }
-    }
+    }*/
 
     //-----------------------------------------------| Get Direction Data
     //https://stackoverflow.com/questions/40455341/how-to-parse-steps-from-the-google-directions-api-to-java-android

@@ -29,14 +29,6 @@ public class MeetingModel {
         this.client = client;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getFromDate() {
         return fromDate;
     }
@@ -51,6 +43,14 @@ public class MeetingModel {
 
     public void setToDate(String toDate) {
         this.toDate = toDate;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public ArrayList<String> getParticipants() {

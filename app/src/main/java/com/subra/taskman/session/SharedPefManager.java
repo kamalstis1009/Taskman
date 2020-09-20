@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.models.UserModel;
 
 import java.util.ArrayList;
 
@@ -52,17 +53,17 @@ public class SharedPefManager {
     }
 
     //===============================================| User
-    /*public void saveUser(User model){
+    public void saveUser(UserModel model){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("UserModel", new Gson().toJson(model));
         editor.apply();
         editor.commit(); //for old version
     }
-    public User getUser(){
+    public UserModel getUser(){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return new Gson().fromJson(pref.getString("UserModel", null), User.class);
-    }*/
+        return new Gson().fromJson(pref.getString("UserModel", null), UserModel.class);
+    }
 
     //===============================================| Your Product
     public void saveMeetingModels(MeetingModel model){

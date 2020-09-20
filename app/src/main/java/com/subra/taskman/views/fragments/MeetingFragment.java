@@ -23,6 +23,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.subra.taskman.R;
 import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.models.UserModel;
 import com.subra.taskman.session.SharedPefManager;
 
 import java.util.ArrayList;
@@ -34,13 +35,17 @@ public class MeetingFragment extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting, container, false);
 
+        //------------------------------------------------| Session
+        UserModel mUser = SharedPefManager.getInstance(getActivity()).getUser();
+
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
 
         //------------------------------------------------| findViewById()
         EditText mTitle = (EditText) view.findViewById(R.id.meeting_title);
         Spinner mClient = (Spinner) view.findViewById(R.id.meeting_client);
-        EditText mDate = (EditText) view.findViewById(R.id.meeting_date);
+        EditText mFromDate = (EditText) view.findViewById(R.id.meeting_from_date);
+        EditText mToDate = (EditText) view.findViewById(R.id.meeting_to_date);
         ChipGroup mChipGroup = (ChipGroup) view.findViewById(R.id.meeting_participants);
         EditText mLocation = (EditText) view.findViewById(R.id.meeting_location);
         EditText mDescription = (EditText) view.findViewById(R.id.meeting_description);
@@ -71,17 +76,20 @@ public class MeetingFragment extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 String title = mTitle.getText().toString().trim();
                 String client = mClient.getSelectedItem().toString();
-                String date = mDate.getText().toString().trim();
+                String fromDate = mFromDate.getText().toString().trim();
+                String toDate = mToDate.getText().toString().trim();
                 String location = mLocation.getText().toString().trim();
                 String description = mDescription.getText().toString().trim();
 
                 MeetingModel model = new MeetingModel();
                 model.setTitle(title);
                 model.setClient(client);
-                model.setFromDate(date);
+                model.setFromDate(fromDate);
+                model.setToDate(toDate);
                 model.setLocation(location);
                 model.setRemarks(description);
                 model.setParticipants(mArrayList);
+                model.setUserId(mUser.getUserId());
 
                 SharedPefManager.getInstance(getActivity()).saveMeetingModels(model);
             }

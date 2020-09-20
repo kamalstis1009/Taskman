@@ -110,6 +110,7 @@
                     android:background="@drawable/shape_radius_100_edit_text"
                     android:paddingStart="25dp"
                     android:paddingEnd="25dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"

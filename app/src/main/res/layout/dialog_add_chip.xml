@@ -17,7 +17,7 @@
         android:layout_height="wrap_content">
         <EditText
             android:id="@+id/participant_email"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:singleLine="true"
             android:hint="Participant Email"
             android:layout_marginBottom="10dp"

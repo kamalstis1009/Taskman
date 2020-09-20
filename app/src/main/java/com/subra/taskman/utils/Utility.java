@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
@@ -42,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -243,6 +245,32 @@ public class Utility {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 String date = year +"-"+ (String.format("%02d", month+1)) +"-"+ String.format("%02d", dayOfMonth);
                 birth.setText(date);
+            }
+        }, year, mon, day).show();
+    }
+
+    public void getDateTimePickerDialog(Context context, final EditText birth) {
+        DatePicker datePicker = new DatePicker(context);
+        int day = datePicker.getDayOfMonth();
+        int mon = datePicker.getMonth();
+        int year = datePicker.getYear();
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String date = year +"-"+ (String.format("%02d", month+1)) +"-"+ String.format("%02d", dayOfMonth);
+                Calendar calendar = Calendar.getInstance();
+                int mHour = calendar.get(Calendar.HOUR_OF_DAY);
+                int mMinute = calendar.get(Calendar.MINUTE);
+                int mSecond = calendar.get(Calendar.SECOND);
+                int mMillisecond = calendar.get(Calendar.MILLISECOND);
+                TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        birth.setText(date + " " + hour + ":" + minute + ":" + mSecond + "." + mMillisecond); //yyyy-MM-dd HH:mm:ss | 2020-07-21 01:57:33.435
+                    }
+                }, mHour, mMinute, true);
+                //mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
             }
         }, year, mon, day).show();
     }

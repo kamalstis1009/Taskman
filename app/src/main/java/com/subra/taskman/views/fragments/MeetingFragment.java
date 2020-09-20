@@ -124,14 +124,14 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         mFromDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utility.getInstance().getDatePickerDialog(getActivity(), mFromDate);
+                Utility.getInstance().getDateTimePickerDialog(getActivity(), mFromDate);
             }
         });
 
         mToDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utility.getInstance().getDatePickerDialog(getActivity(), mToDate);
+                Utility.getInstance().getDateTimePickerDialog(getActivity(), mToDate);
             }
         });
 

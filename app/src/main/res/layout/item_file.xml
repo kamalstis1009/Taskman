@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_product_layout"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:layout_marginBottom="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_marginStart="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/file_name"
+                android:textSize="16sp"
+                android:text="File Name"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/file_path"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:text="Your Page has information that needs your review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/remove_item_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shape_radius_100_edit_text"
+            android:src="@drawable/ic_baseline_close_24"
+            android:layout_marginStart="15dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

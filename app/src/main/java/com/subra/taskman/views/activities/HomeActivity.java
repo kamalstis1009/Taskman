@@ -28,6 +28,7 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener {
 
+    private RecyclerView mMeetingRecyclerView;
     private ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
     private MeetingAdapter mMeetingAdapter;
 
@@ -65,8 +66,8 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         });
 
         //-----------------------------------------------| Meeting
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_meeting);
-        initRecyclerView(mRecyclerView, mMeetingList);
+        mMeetingRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_meeting);
+        initRecyclerView(mMeetingRecyclerView, mMeetingList);
         ((ImageButton) findViewById(R.id.add_meeting_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,9 +105,9 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         });
     }
 
-    private void initRecyclerView(RecyclerView mRecyclerView, ArrayList<MeetingModel> list) {
-        if (list != null && list.size() > 0) {
-            mMeetingAdapter = new MeetingAdapter(this, SharedPefManager.getInstance(this).getMeetingModels(), this);
+    private void initRecyclerView(RecyclerView mRecyclerView, ArrayList<MeetingModel> arrayList) {
+        if (arrayList != null && arrayList.size() > 0) {
+            mMeetingAdapter = new MeetingAdapter(arrayList, this);
             mRecyclerView.setAdapter(mMeetingAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -133,9 +134,19 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         mAdapter.notifyDataSetChanged();
     }
 
-    @Override
     public void onAddItem(MeetingModel model) {
         mMeetingList.add(model);
         mMeetingAdapter.notifyItemInserted(mMeetingList.size());
+    }
+
+    @Override
+    public void onRemoveItem(int position, MeetingModel model) {
+        if (mMeetingList != null && mMeetingList.size() > 0) {
+            //mArrayList.remove(model);
+            mMeetingList.remove(position);
+            mMeetingRecyclerView.removeViewAt(position);
+            mMeetingAdapter.notifyItemRemoved(position);
+            mMeetingAdapter.notifyItemRangeChanged(position, mMeetingList.size());
+        }
     }
 }

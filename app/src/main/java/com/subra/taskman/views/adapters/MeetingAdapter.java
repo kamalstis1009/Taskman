@@ -17,18 +17,17 @@ import java.util.ArrayList;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHolder> {
 
-    private FragmentActivity mActivity;
+    //private FragmentActivity mActivity;
     private ArrayList<MeetingModel> mArrayList;
     private MyCallBackListener mListener;
 
     public interface MyCallBackListener {
-        void onAddItem(MeetingModel model);
-        //void onRemoveItem(int position, MeetingModel model);
+        //void onAddItem(MeetingModel model);
+        void onRemoveItem(int position, MeetingModel model);
         //void updateItem(int position, MeetingModel model);
     }
 
-    public MeetingAdapter(FragmentActivity mActivity, ArrayList<MeetingModel> arrayList, MyCallBackListener listener) {
-        this.mActivity = mActivity;
+    public MeetingAdapter(ArrayList<MeetingModel> arrayList, MyCallBackListener listener) {
         this.mArrayList = arrayList;
         this.mListener = listener;
     }
@@ -50,9 +49,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHo
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (model != null) {
-                    mListener.onAddItem(model);
-                }
+                mListener.onRemoveItem(position, model);
             }
         });
     }

@@ -91,8 +91,6 @@ public class MeetingFragment extends BottomSheetDialogFragment {
                     model.setParticipants(mArrayList);
                     model.setRemarks(description);
                     model.setUserId(mUser.getUserId());
-
-                    SharedPefManager.getInstance(getActivity()).saveMeetingModels(model);
                 }
             }
         });

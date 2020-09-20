@@ -74,24 +74,26 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         ((Button) view.findViewById(R.id.add_product_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = mTitle.getText().toString().trim();
-                String client = mClient.getSelectedItem().toString();
-                String fromDate = mFromDate.getText().toString().trim();
-                String toDate = mToDate.getText().toString().trim();
-                String location = mLocation.getText().toString().trim();
-                String description = mDescription.getText().toString().trim();
+                if (mUser != null) {
+                    String title = mTitle.getText().toString().trim();
+                    String client = mClient.getSelectedItem().toString();
+                    String fromDate = mFromDate.getText().toString().trim();
+                    String toDate = mToDate.getText().toString().trim();
+                    String location = mLocation.getText().toString().trim();
+                    String description = mDescription.getText().toString().trim();
 
-                MeetingModel model = new MeetingModel();
-                model.setTitle(title);
-                model.setClient(client);
-                model.setFromDate(fromDate);
-                model.setToDate(toDate);
-                model.setLocation(location);
-                model.setRemarks(description);
-                model.setParticipants(mArrayList);
-                model.setUserId(mUser.getUserId());
+                    MeetingModel model = new MeetingModel();
+                    model.setTitle(title);
+                    model.setClient(client);
+                    model.setFromDate(fromDate);
+                    model.setToDate(toDate);
+                    model.setLocation(location);
+                    model.setParticipants(mArrayList);
+                    model.setRemarks(description);
+                    model.setUserId(mUser.getUserId());
 
-                SharedPefManager.getInstance(getActivity()).saveMeetingModels(model);
+                    SharedPefManager.getInstance(getActivity()).saveMeetingModels(model);
+                }
             }
         });
 

@@ -28,7 +28,8 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener {
 
-    ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
+    private ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
+    private MeetingAdapter mMeetingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +106,12 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
 
     private void initRecyclerView(RecyclerView mRecyclerView, ArrayList<MeetingModel> list) {
         if (list != null && list.size() > 0) {
-            MeetingAdapter mAdapter = new MeetingAdapter(this, SharedPefManager.getInstance(this).getMeetingModels(), this);
-            mRecyclerView.setAdapter(mAdapter);
+            mMeetingAdapter = new MeetingAdapter(this, SharedPefManager.getInstance(this).getMeetingModels(), this);
+            mRecyclerView.setAdapter(mMeetingAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
-            mAdapter.notifyDataSetChanged();
+            mMeetingAdapter.notifyDataSetChanged();
         }
     }
 
@@ -134,6 +135,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
 
     @Override
     public void onAddItem(MeetingModel model) {
-        //
+        mMeetingList.add(model);
+        mMeetingAdapter.notifyItemInserted(mMeetingList.size());
     }
 }

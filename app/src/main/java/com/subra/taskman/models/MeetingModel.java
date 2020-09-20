@@ -7,9 +7,11 @@ public class MeetingModel {
     private String title;
     private String client;
     private String location;
-    private String date;
+    private String fromDate;
+    private String toDate;
     private ArrayList<String> participants;
     private String remarks;
+    private String userId;
 
     public String getTitle() {
         return title;
@@ -35,12 +37,20 @@ public class MeetingModel {
         this.location = location;
     }
 
-    public String getDate() {
-        return date;
+    public String getFromDate() {
+        return fromDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
     }
 
     public ArrayList<String> getParticipants() {
@@ -57,5 +67,13 @@ public class MeetingModel {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

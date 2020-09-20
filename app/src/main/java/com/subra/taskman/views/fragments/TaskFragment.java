@@ -1,6 +1,7 @@
 package com.subra.taskman.views.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,12 +19,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.subra.taskman.R;
 import com.subra.taskman.models.FileModel;
+import com.subra.taskman.models.MeetingModel;
 import com.subra.taskman.views.adapters.AttachmentAdapter;
 import com.subra.taskman.views.adapters.RecordAdapter;
 
 import java.util.ArrayList;
 
 public class TaskFragment extends BottomSheetDialogFragment implements AttachmentAdapter.MyCallBackListener, RecordAdapter.MyCallBackListener {
+
+    private BottomSheetListener mListener;
+
+    public interface BottomSheetListener {
+        void onAddItem(MeetingModel model);
+    }
 
     private ArrayList<FileModel> mAttachList = new ArrayList<>();
     private RecyclerView mAttachRecyclerView;
@@ -107,6 +115,16 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
         mRecordAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (BottomSheetListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement BottomSheetListener");
+        }
     }
 
     //===============================================| Remove modal dialog background scrim grey color

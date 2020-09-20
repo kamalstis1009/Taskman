@@ -7,7 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,6 +65,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
     private static final int REQUEST_CODE = 2;
     private static final int REQUEST_CODE_CAMERA = 3;
     private static final int REQUEST_IMAGE_CAPTURE = 4;
+    private static final int REQUEST_RECORD = 5;
 
     private ArrayList<FileModel> mAttachList = new ArrayList<>();
     private RecyclerView mAttachRecyclerView;
@@ -69,22 +75,18 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
     private RecyclerView mRecordRecyclerView;
     private RecordAdapter mRecordAdapter;
 
+    //Attachment
     private File mFile;
     private String currentPhotoPath;
 
-    private String[] PERMISSIONS = {
-            android.Manifest.permission.RECORD_AUDIO,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    };
-    private PermissionUtils mPermissions;
+    //Record
+    private String mFilePath;
+    private boolean isStarted;
+    private MediaRecorder mRecorder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task, container, false);
-
-        //-----------------------------------------------| List of Permissions
-        mPermissions = new PermissionUtils(getActivity(), PERMISSIONS);
 
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
@@ -164,7 +166,11 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
                     showDialog();
                     break;
                 case R.id.add_record_button :
-                    //dismiss();
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[] {Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD);
+                    } else {
+                        showRecordDialog();
+                    }
                     break;
                 case R.id.add_task_button :
                     //mListener.onAddItem(model);
@@ -227,29 +233,104 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         builder.setCancelable(true);
         builder.create();
         final AlertDialog dialog = builder.show();
-        ((ImageButton) view.findViewById(R.id.camera_id)).setOnClickListener(new View.OnClickListener() {
+
+        TextView timer = (TextView) view.findViewById(R.id.record_timer);
+        ImageButton recordBtn = (ImageButton) view.findViewById(R.id.record_button);
+        ImageButton stopBtn = (ImageButton) view.findViewById(R.id.stop_button);
+        ImageButton playBtn = (ImageButton) view.findViewById(R.id.play_button);
+        stopBtn.setEnabled(false);
+        playBtn.setEnabled(false);
+
+        recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
-                } else {
-                    getCamera();
-                }
-                dialog.dismiss();
+                new BackTask().execute("start");
+                recordBtn.setEnabled(false);
+                stopBtn.setEnabled(true);
             }
         });
-        ((ImageButton) view.findViewById(R.id.gallery_id)).setOnClickListener(new View.OnClickListener() {
+        stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-                } else {
-                    getImage();
+                new BackTask().execute("stop");
+                recordBtn.setEnabled(true);
+                stopBtn.setEnabled(false);
+                playBtn.setEnabled(true);
+            }
+        });
+        playBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MediaPlayer mPlayer = new MediaPlayer();
+                try {
+                    if (mFilePath != null) {
+                        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                        mPlayer.setDataSource(getActivity(), Uri.parse(mFilePath));
+                        mPlayer.prepare();
+                        mPlayer.start();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            }
+        });
+        ((ImageButton) view.findViewById(R.id.close_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 dialog.dismiss();
             }
         });
     }
+
+    //===============================================| Recording Task
+    class BackTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            if (params[0].equals("start")) {
+                try {
+                    String path = getActivity().getFilesDir().getPath();
+                    File file = new File(path);
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+                    mRecorder = new MediaRecorder();
+                    /*mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+                    mRecorder.setAudioChannels(1);
+                    mRecorder.setAudioSamplingRate(8000);
+                    mRecorder.setAudioEncodingBitRate(44100);
+                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);*/
+
+                    mRecorder.reset();
+                    mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+                    if (!file.exists()){
+                        file.mkdirs();
+                    }
+                    mFilePath = file+"/" + "REC_" + timeStamp + ".3gp";
+                    mRecorder.setOutputFile(mFilePath);
+
+                    mRecorder.prepare();
+                    mRecorder.start();
+                    isStarted = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (params[0].equals("stop")) {
+                if (isStarted && mRecorder != null) {
+                    mRecorder.stop();
+                    mRecorder.reset(); // You can reuse the object by going back to setAudioSource() step
+                    mRecorder.release();
+                    mRecorder = null;
+                    isStarted = false;
+                }
+            }
+            return null;
+        }
+    }
+
 
     //====================================================| For Image
     private void showDialog() {
@@ -343,6 +424,9 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         }
         if (requestCode == REQUEST_CODE_CAMERA) {
             getCamera();
+        }
+        if (requestCode == REQUEST_RECORD) {
+            showRecordDialog();
         }
     }
 

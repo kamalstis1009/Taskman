@@ -1,67 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="45dp"
-    android:gravity="center"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="15dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageButton
-        android:gravity="center"
-        android:padding="25dp"
-        android:contentDescription="Camera"
+        android:id="@+id/close_button"
+        android:layout_alignParentEnd="true"
         android:tint="@color/colorPrimary"
-        android:src="@drawable/ic_baseline_mic_24"
+        android:src="@drawable/ic_baseline_close_24"
         android:background="@drawable/shape_radius_100_pad_10_stroke_grey_bg_white"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        android:layout_width="110dp"
-        android:layout_height="110dp" />
-
-    <TextView
-        android:text="02 : 00"
-        android:textSize="35sp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:padding="35dp"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageButton
+            android:gravity="center"
+            android:padding="25dp"
+            android:contentDescription="Camera"
+            android:tint="@color/colorPrimary"
+            android:src="@drawable/ic_baseline_mic_24"
+            android:background="@drawable/shape_radius_100_pad_10_stroke_grey_bg_white"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_width="110dp"
+            android:layout_height="110dp" />
+
+        <TextView
+            android:id="@+id/record_timer"
+            android:text="02 : 00"
+            android:textSize="35sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <LinearLayout
-            android:layout_marginEnd="5dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <Button
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
                 android:id="@+id/record_button"
-                android:text="Record"
-                android:textColor="@color/colorWhite"
-                style="?android:attr/borderlessButtonStyle"
-                android:backgroundTint="@color/colorPrimary"
-                android:background="@drawable/selector_button_round"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:tint="@color/colorPrimary"
+                android:src="@drawable/ic_baseline_fiber_manual_record_24"
+                android:background="@drawable/shape_radius_100_pad_10_stroke_grey_bg_white"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <ImageButton
+                android:id="@+id/stop_button"
+                android:tint="@color/colorPrimary"
+                android:src="@drawable/ic_baseline_stop_24"
+                android:background="@drawable/shape_radius_100_pad_10_stroke_grey_bg_white"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <ImageButton
+                android:id="@+id/play_button"
+                android:tint="@color/colorPrimary"
+                android:src="@drawable/ic_baseline_play_arrow_24"
+                android:background="@drawable/shape_radius_100_pad_10_stroke_grey_bg_white"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginStart="5dp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-            <Button
-                android:id="@+id/cancel_button"
-                android:text="Cancel"
-                android:textColor="@color/colorWhite"
-                style="?android:attr/borderlessButtonStyle"
-                android:background="@drawable/selector_button_round"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+
     </LinearLayout>
 
 
-</LinearLayout>
+
+</RelativeLayout>

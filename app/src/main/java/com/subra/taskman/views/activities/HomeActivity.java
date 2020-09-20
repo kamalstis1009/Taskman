@@ -25,7 +25,7 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
-public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener {
+public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener {
 
     private RecyclerView mMeetingRecyclerView;
     private ArrayList<MeetingModel> mMeetingList = new ArrayList<>();

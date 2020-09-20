@@ -81,7 +81,7 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         EditText mDescription = (EditText) view.findViewById(R.id.meeting_description);
 
         //------------------------------------------------| Participants
-        ArrayList<String> mArrayList = new ArrayList( Arrays.asList( new String[]{"Jasim", "Hasan", "Mamun", "Monir", "Yousuf"} ) );
+        ArrayList<String> mArrayList = new ArrayList( Arrays.asList( new String[]{"kamalstis1009@gmail.com"} ) );
         for (int index = 0; index < mArrayList.size(); index++) {
             String tagName = mArrayList.get(index);
             Chip chip = addChip(tagName);

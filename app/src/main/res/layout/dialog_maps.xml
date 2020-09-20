@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.google.android.gms.maps.MapView>
+
+    <TextView
+        android:padding="15dp"
+        android:layout_marginTop="35dp"
+        android:text="To change your delivery location"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <ImageView
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_marker_pick_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/pick_point_ok"
+        android:text="Done"
+        android:layout_alignBottom="@+id/mapView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:textColor="@color/colorWhite"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/selector_button_round"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

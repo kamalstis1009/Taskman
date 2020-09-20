@@ -43,6 +43,7 @@ import com.google.gson.Gson;
 import com.subra.taskman.R;
 import com.subra.taskman.models.FileModel;
 import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.services.RecordForegroundService;
 import com.subra.taskman.utils.ConstantKey;
 import com.subra.taskman.utils.PermissionUtils;
 import com.subra.taskman.utils.TimeCount;
@@ -289,7 +290,8 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BackTask().execute("start");
+                //new BackTask().execute("start");
+                startMyService(getActivity(), ConstantKey.RECORDING, "Nothing");
                 recordBtn.setEnabled(false);
                 stopBtn.setEnabled(true);
                 TimeCount.getInstance().getCounter(new TimeCount.ShowCounter() {
@@ -303,7 +305,8 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BackTask().execute("stop");
+                //new BackTask().execute("stop");
+                stopMyService(getActivity());
                 recordBtn.setEnabled(true);
                 stopBtn.setEnabled(false);
                 //playBtn.setEnabled(true);
@@ -317,6 +320,18 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                 dialog.dismiss();
             }
         });
+    }
+
+    private void startMyService(Context context, String key, String value) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            ContextCompat.startForegroundService(context, new Intent(context, RecordForegroundService.class).putExtra(key, value)); //ForegroundService
+        } else {
+            context.startService(new Intent(context, RecordForegroundService.class).putExtra(key, value)); //BackgroundService
+        }
+    }
+
+    private void stopMyService(Context context) {
+        context.stopService(new Intent(context, RecordForegroundService.class)); //ForegroundService
     }
 
     //===============================================| Recording Task

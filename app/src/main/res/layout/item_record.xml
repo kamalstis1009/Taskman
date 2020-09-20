@@ -38,17 +38,18 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <com.chibde.visualizer.LineVisualizer
+            android:orientation="vertical"
+            android:id="@+id/line_visualizer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+
         <LinearLayout
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <com.chibde.visualizer.LineVisualizer
-                android:orientation="vertical"
-                android:id="@+id/line_visualizer"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"/>
             <ImageButton
                 android:id="@+id/play_button"
                 android:tint="@color/colorPrimary"

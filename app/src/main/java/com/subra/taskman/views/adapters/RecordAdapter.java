@@ -54,47 +54,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyViewHold
         holder.file.setText(model.getFileName());
         holder.path.setText(model.getFilePath());
 
-        /*holder.play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaPlayer mPlayer = new MediaPlayer();
-                try {
-                    if (model.getFilePath() != null) {
-                        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        mPlayer.setDataSource(mActivity, Uri.parse(model.getFilePath()));
-                        mPlayer.prepare();
-                        mPlayer.start();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        holder.stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaPlayer mPlayer = new MediaPlayer();
-                try {
-                    if (mFilePath != null) {
-                        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        mPlayer.setDataSource(getActivity(), Uri.parse(mFilePath));
-                        mPlayer.prepare();
-                        mPlayer.start();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        holder.remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onRemoveRecord(position, model);
-            }
-        });*/
-
         holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

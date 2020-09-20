@@ -369,8 +369,6 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                     isStarted = false;
 
                     if (mRecordName != null && mRecordFilePath != null) {
-                        FileModel model = new FileModel(mRecordName, mRecordFilePath);
-                        mRecordList.add(model);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

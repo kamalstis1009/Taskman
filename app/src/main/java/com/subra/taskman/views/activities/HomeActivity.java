@@ -28,6 +28,8 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class HomeActivity extends AppCompatActivity {
 
+    ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //-----------------------------------------------| Meeting
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_meeting);
-        initRecyclerView(mRecyclerView);
+        initRecyclerView(mRecyclerView, mMeetingList);
         ((ImageButton) findViewById(R.id.add_meeting_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,8 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void initRecyclerView(RecyclerView mRecyclerView) {
-        ArrayList<MeetingModel> list = SharedPefManager.getInstance(this).getMeetingModels();
+    private void initRecyclerView(RecyclerView mRecyclerView, ArrayList<MeetingModel> list) {
         if (list != null && list.size() > 0) {
             MeetingAdapter mAdapter = new MeetingAdapter(this, SharedPefManager.getInstance(this).getMeetingModels());
             mRecyclerView.setAdapter(mAdapter);

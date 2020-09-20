@@ -6,9 +6,9 @@ public class MeetingModel {
 
     private String title;
     private String client;
-    private String location;
     private String fromDate;
     private String toDate;
+    private String location;
     private ArrayList<String> participants;
     private String remarks;
     private String userId;

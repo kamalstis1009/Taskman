@@ -36,7 +36,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHo
         MeetingModel model = mArrayList.get(position);
         holder.title.setText(model.getTitle());
         holder.remarks.setText(model.getRemarks());
-        holder.date.setText(model.getDate());
+        holder.date.setText(model.getFromDate());
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.subra.taskman.R;
 import com.subra.taskman.models.MeetingModel;
 import com.subra.taskman.models.UserModel;
 import com.subra.taskman.session.SharedPefManager;
+import com.subra.taskman.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,29 +79,45 @@ public class MeetingFragment extends BottomSheetDialogFragment {
             mChipGroup.addView(chip);
         }
 
+        mFromDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utility.getInstance().getDatePickerDialog(getActivity(), mFromDate);
+            }
+        });
+
+        mToDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utility.getInstance().getDatePickerDialog(getActivity(), mToDate);
+            }
+        });
+
         ((Button) view.findViewById(R.id.add_product_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mUser != null) {
-                    String title = mTitle.getText().toString().trim();
-                    String client = mClient.getSelectedItem().toString();
-                    String fromDate = mFromDate.getText().toString().trim();
-                    String toDate = mToDate.getText().toString().trim();
-                    String location = mLocation.getText().toString().trim();
-                    String description = mDescription.getText().toString().trim();
-
-                    MeetingModel model = new MeetingModel();
-                    model.setTitle(title);
-                    model.setClient(client);
-                    model.setFromDate(fromDate);
-                    model.setToDate(toDate);
-                    model.setLocation(location);
-                    model.setParticipants(mArrayList);
-                    model.setRemarks(description);
-                    model.setUserId(mUser.getUserId());
-
-                    mListener.onAddItem(model);
+                    //
                 }
+                String title = mTitle.getText().toString().trim();
+                String client = mClient.getSelectedItem().toString();
+                String fromDate = mFromDate.getText().toString().trim();
+                String toDate = mToDate.getText().toString().trim();
+                String location = mLocation.getText().toString().trim();
+                String description = mDescription.getText().toString().trim();
+
+                MeetingModel model = new MeetingModel();
+                model.setTitle(title);
+                model.setClient(client);
+                model.setFromDate(fromDate);
+                model.setToDate(toDate);
+                model.setLocation(location);
+                model.setParticipants(mArrayList);
+                model.setRemarks(description);
+                //model.setUserId(mUser.getUserId());
+
+                mListener.onAddItem(model);
+                dismiss();
             }
         });
 

@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 
 import com.subra.taskman.R;
 import com.subra.taskman.models.MeetingModel;
-import com.subra.taskman.session.SharedPefManager;
 import com.subra.taskman.views.adapters.CallAdapter;
 import com.subra.taskman.views.adapters.MeetingAdapter;
 import com.subra.taskman.views.adapters.TaskAdapter;
@@ -106,14 +105,12 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
     }
 
     private void initRecyclerView(RecyclerView mRecyclerView, ArrayList<MeetingModel> arrayList) {
-        if (arrayList != null && arrayList.size() > 0) {
-            mMeetingAdapter = new MeetingAdapter(arrayList, this);
-            mRecyclerView.setAdapter(mMeetingAdapter);
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
-            mMeetingAdapter.notifyDataSetChanged();
-        }
+        mMeetingAdapter = new MeetingAdapter(arrayList, this);
+        mRecyclerView.setAdapter(mMeetingAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
+        mMeetingAdapter.notifyDataSetChanged();
     }
 
     private void initRecyclerView2(RecyclerView mRecyclerView) {

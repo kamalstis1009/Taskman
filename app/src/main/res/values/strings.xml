@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Taskman</string>
 
+    <!-- ProgressDialog -->
+    <string name="progress">Please wait…</string>
+
+    <!-- Alert messages -->
+    <string name="alert_title">Alert</string>
+    <string name="alert_ok">OK</string>
+    <string name="msg_network_unavailable">Network connection is not available</string>
+    <string name="msg_location_unavailable">Location service is not enabled</string>
+    <string name="msg_no_internet">No internet found. Please check your internet settings.</string>
+
     <string-array name="client_array">
         <item>Select Client</item>
         <item>Subra Systems Ltd.</item>

@@ -1,15 +1,31 @@
 package com.subra.taskman.views.fragments;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,10 +36,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.subra.taskman.R;
 import com.subra.taskman.models.FileModel;
 import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.utils.ConstantKey;
+import com.subra.taskman.utils.PermissionUtils;
+import com.subra.taskman.utils.Utility;
 import com.subra.taskman.views.adapters.AttachmentAdapter;
 import com.subra.taskman.views.adapters.RecordAdapter;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TaskFragment extends BottomSheetDialogFragment implements AttachmentAdapter.MyCallBackListener, RecordAdapter.MyCallBackListener {
 
@@ -33,6 +56,11 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         void onAddItem(MeetingModel model);
     }
 
+    private static final int ACTION_PICK_REQUEST_CODE = 1;
+    private static final int REQUEST_CODE = 2;
+    private static final int REQUEST_CODE_CAMERA = 3;
+    private static final int REQUEST_IMAGE_CAPTURE = 4;
+
     private ArrayList<FileModel> mAttachList = new ArrayList<>();
     private RecyclerView mAttachRecyclerView;
     private AttachmentAdapter mAttachAdapter;
@@ -41,13 +69,35 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
     private RecyclerView mRecordRecyclerView;
     private RecordAdapter mRecordAdapter;
 
+    private File mFile;
+    private String currentPhotoPath;
+
+    private String[] PERMISSIONS = {
+            android.Manifest.permission.RECORD_AUDIO,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
+    private PermissionUtils mPermissions;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task, container, false);
 
+        //-----------------------------------------------| List of Permissions
+        mPermissions = new PermissionUtils(getActivity(), PERMISSIONS);
+
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
 
+        //------------------------------------------------| findViewById()
+        EditText mTitle = (EditText) view.findViewById(R.id.task_title);
+        EditText mDate = (EditText) view.findViewById(R.id.task_date);
+        Spinner mPriority = (Spinner) view.findViewById(R.id.task_priority);
+        Spinner mStatus = (Spinner) view.findViewById(R.id.task_status);
+        EditText mDescription = (EditText) view.findViewById(R.id.task_description);
+        ((ImageButton) view.findViewById(R.id.add_attachment_button)).setOnClickListener(new ActionEventHandler());
+        ((ImageButton) view.findViewById(R.id.add_record_button)).setOnClickListener(new ActionEventHandler());
+        ((Button) view.findViewById(R.id.add_task_button)).setOnClickListener(new ActionEventHandler());
         ((ImageButton) view.findViewById(R.id.back_button)).setOnClickListener(new ActionEventHandler());
 
         //-----------------------------------------------| Attachment
@@ -61,62 +111,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         return view;
     }
 
-    public void onAddAttachment(FileModel model) {
-        mAttachList.add(model);
-        mAttachAdapter.notifyItemInserted(mAttachList.size());
-    }
-
-    @Override
-    public void onRemoveAttachment(int position, FileModel model) {
-        if (mAttachList != null && mAttachList.size() > 0) {
-            //mArrayList.remove(model);
-            mAttachList.remove(position);
-            mAttachRecyclerView.removeViewAt(position);
-            mAttachAdapter.notifyItemRemoved(position);
-            mAttachAdapter.notifyItemRangeChanged(position, mAttachList.size());
-        }
-    }
-
-    @Override
-    public void onRemoveRecord(int position, FileModel model) {
-        if (mRecordList != null && mRecordList.size() > 0) {
-            //mArrayList.remove(model);
-            mRecordList.remove(position);
-            mRecordRecyclerView.removeViewAt(position);
-            mRecordAdapter.notifyItemRemoved(position);
-            mRecordAdapter.notifyItemRangeChanged(position, mRecordList.size());
-        }
-    }
-
-    private class ActionEventHandler implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.back_button :
-                    dismiss();
-                    break;
-            }
-        }
-    }
-
-    private void initRecyclerView1(RecyclerView mRecyclerView, ArrayList<FileModel> arrayList) {
-        mAttachAdapter = new AttachmentAdapter(arrayList, this);
-        mRecyclerView.setAdapter(mAttachAdapter);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
-        mAttachAdapter.notifyDataSetChanged();
-    }
-
-    private void initRecyclerView2(RecyclerView mRecyclerView, ArrayList<FileModel> arrayList) {
-        mRecordAdapter = new RecordAdapter(arrayList, this);
-        mRecyclerView.setAdapter(mRecordAdapter);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
-        mRecordAdapter.notifyDataSetChanged();
-    }
-
+    //===============================================| onAttach
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -127,7 +122,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
         }
     }
 
-    //===============================================| Remove modal dialog background scrim grey color
+
     @Override
     public void onResume() {
         super.onResume();
@@ -157,4 +152,199 @@ public class TaskFragment extends BottomSheetDialogFragment implements Attachmen
             }
         });
     }
+
+    private class ActionEventHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.back_button :
+                    dismiss();
+                    break;
+                case R.id.add_attachment_button :
+                    showDialog();
+                    break;
+                case R.id.add_record_button :
+                    //dismiss();
+                    break;
+                case R.id.add_task_button :
+                    //mListener.onAddItem(model);
+                    //dismiss();
+                    break;
+            }
+        }
+    }
+
+    public void onAddAttachment(FileModel model) {
+        mAttachList.add(model);
+        mAttachAdapter.notifyItemInserted(mAttachList.size());
+    }
+
+    @Override
+    public void onRemoveAttachment(int position, FileModel model) {
+        if (mAttachList != null && mAttachList.size() > 0) {
+            //mArrayList.remove(model);
+            mAttachList.remove(position);
+            mAttachRecyclerView.removeViewAt(position);
+            mAttachAdapter.notifyItemRemoved(position);
+            mAttachAdapter.notifyItemRangeChanged(position, mAttachList.size());
+        }
+    }
+
+    @Override
+    public void onRemoveRecord(int position, FileModel model) {
+        if (mRecordList != null && mRecordList.size() > 0) {
+            //mArrayList.remove(model);
+            mRecordList.remove(position);
+            mRecordRecyclerView.removeViewAt(position);
+            mRecordAdapter.notifyItemRemoved(position);
+            mRecordAdapter.notifyItemRangeChanged(position, mRecordList.size());
+        }
+    }
+
+    private void initRecyclerView1(RecyclerView mRecyclerView, ArrayList<FileModel> arrayList) {
+        mAttachAdapter = new AttachmentAdapter(arrayList, this);
+        mRecyclerView.setAdapter(mAttachAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
+        mAttachAdapter.notifyDataSetChanged();
+    }
+
+    private void initRecyclerView2(RecyclerView mRecyclerView, ArrayList<FileModel> arrayList) {
+        mRecordAdapter = new RecordAdapter(arrayList, this);
+        mRecyclerView.setAdapter(mRecordAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
+        mRecordAdapter.notifyDataSetChanged();
+    }
+
+    //====================================================| For Record
+    private void showRecordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_record, null, false);
+        builder.setView(view);
+        builder.setCancelable(true);
+        builder.create();
+        final AlertDialog dialog = builder.show();
+        ((ImageButton) view.findViewById(R.id.camera_id)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+                } else {
+                    getCamera();
+                }
+                dialog.dismiss();
+            }
+        });
+        ((ImageButton) view.findViewById(R.id.gallery_id)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                } else {
+                    getImage();
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    //====================================================| For Image
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_photo_upload_option, null, false);
+        builder.setView(view);
+        builder.setCancelable(true);
+        builder.create();
+        final AlertDialog dialog = builder.show();
+        ((ImageButton) view.findViewById(R.id.camera_id)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+                } else {
+                    getCamera();
+                }
+                dialog.dismiss();
+            }
+        });
+        ((ImageButton) view.findViewById(R.id.gallery_id)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                } else {
+                    getImage();
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void getCamera() {
+        if (getActivity() != null) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                try {
+                    File photoFile = createImageFile();
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", photoFile); //BuildConfig.APPLICATION_ID || getActivity().getOpPackageName()
+                        //Log.d(TAG, "Image Uri: " + photoURI);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    private File createImageFile() throws IOException {
+        if (getActivity() != null) {
+            String imageFileName = "JPEG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_";
+            File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            File image = File.createTempFile(imageFileName,/* prefix */".jpg",/* suffix */storageDir/* directory */);
+            currentPhotoPath = image.getAbsolutePath();
+            return image;
+        }
+        return null;
+    }
+
+    private void getImage() {
+        startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), ACTION_PICK_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION_PICK_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
+            //imageView.setImageBitmap(bitmap);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
+            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && currentPhotoPath != null) {
+            Uri uri = Uri.fromFile(new File(currentPhotoPath));
+            Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
+            //imageView.setImageBitmap(bitmap);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
+            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getImage();
+        }
+        if (requestCode == REQUEST_CODE_CAMERA) {
+            getCamera();
+        }
+    }
+
+
 }

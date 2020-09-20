@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -82,12 +84,7 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         ArrayList<String> mArrayList = new ArrayList( Arrays.asList( new String[]{"Jasim", "Hasan", "Mamun", "Monir", "Yousuf"} ) );
         for (int index = 0; index < mArrayList.size(); index++) {
             String tagName = mArrayList.get(index);
-            Chip chip = new Chip(getActivity());
-            int paddingDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-            chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
-            chip.setText(tagName);
-            chip.setCloseIconResource(R.drawable.ic_baseline_close_24);
-            chip.setCloseIconEnabled(true);
+            Chip chip = addChip(tagName);
             //Added click listener on close icon to remove tag from ChipGroup
             chip.setOnCloseIconClickListener(new View.OnClickListener() {
                 @Override
@@ -98,6 +95,30 @@ public class MeetingFragment extends BottomSheetDialogFragment {
             });
             mChipGroup.addView(chip);
         }
+
+        ((ImageButton) view.findViewById(R.id.add_participant_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.BorderRoundAlertDialog);
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_add_chip, null, false);
+                builder.setView(view);
+                builder.setCancelable(true);
+                builder.create();
+                AlertDialog dialog = builder.show();
+                EditText pEmail = (EditText) view.findViewById(R.id.participant_email);
+                ((Button) view.findViewById(R.id.add_button)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String email = pEmail.getText().toString().trim();
+                        if (!TextUtils.isEmpty(email)) {
+                            Chip chip = addChip(email);
+                            mChipGroup.addView(chip);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
 
         mFromDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +177,16 @@ public class MeetingFragment extends BottomSheetDialogFragment {
         });
 
         return view;
+    }
+
+    private Chip addChip(String tagName) {
+        Chip chip = new Chip(getActivity());
+        int paddingDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+        chip.setText(tagName);
+        chip.setCloseIconResource(R.drawable.ic_baseline_close_24);
+        chip.setCloseIconEnabled(true);
+        return chip;
     }
 
     @Override

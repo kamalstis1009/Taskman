@@ -18,4 +18,8 @@
         <item name="cornerSize">25dp</item>
     </style>
 
+    <!-- Alert Dialog -->
+    <style name="BorderRoundAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/shape_radius_8_pad_10_stroke_grey_bg_white</item>
+    </style>
 </resources>

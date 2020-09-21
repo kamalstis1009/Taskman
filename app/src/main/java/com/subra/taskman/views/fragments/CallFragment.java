@@ -7,6 +7,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,8 @@ import com.subra.taskman.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CallFragment extends BottomSheetDialogFragment {
 
@@ -80,13 +84,22 @@ public class CallFragment extends BottomSheetDialogFragment {
         builder.setCancelable(true);
         builder.create();
         final AlertDialog dialog = builder.show();
-        ((ImageButton) view.findViewById(R.id.camera_id)).setOnClickListener(new View.OnClickListener() {
+
+        EditText fullName = (EditText) view.findViewById(R.id.full_name);
+        EditText email = (EditText) view.findViewById(R.id.email);
+        EditText company = (EditText) view.findViewById(R.id.company);
+        EditText department = (EditText) view.findViewById(R.id.department);
+        EditText designation = (EditText) view.findViewById(R.id.designation);
+        EditText phone = (EditText) view.findViewById(R.id.phone);
+        EditText description = (EditText) view.findViewById(R.id.description);
+
+        ((CircleImageView) view.findViewById(R.id.person_photo)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
-        ((ImageButton) view.findViewById(R.id.gallery_id)).setOnClickListener(new View.OnClickListener() {
+        ((Button) view.findViewById(R.id.add_contact_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

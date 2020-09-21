@@ -29,7 +29,7 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
-public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, TaskAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener, CallFragment.BottomSheetListener {
+public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, TaskAdapter.MyCallBackListener, CallAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener, CallFragment.BottomSheetListener {
 
     private static final String TAG = "HomeActivity";
     private RecyclerView mMeetingRecyclerView;
@@ -39,6 +39,10 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
     private RecyclerView mTaskRecyclerView;
     private ArrayList<TaskModel> mTaskList = new ArrayList<>();
     private TaskAdapter mTaskAdapter;
+
+    private RecyclerView mCallRecyclerView;
+    private ArrayList<CallModel> mCallList = new ArrayList<>();
+    private CallAdapter mCallAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +104,8 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         });
 
         //-----------------------------------------------| Call
-        RecyclerView mRecyclerView3 = (RecyclerView) findViewById(R.id.recycler_view_call);
-        initRecyclerView3(mRecyclerView3);
+        mCallRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_call);
+        initRecyclerView3(mCallRecyclerView, mCallList);
         ((ImageButton) findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,13 +135,13 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         mTaskAdapter.notifyDataSetChanged();
     }
 
-    private void initRecyclerView3(RecyclerView mRecyclerView) {
-        CallAdapter mAdapter = new CallAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
+    private void initRecyclerView3(RecyclerView mRecyclerView, ArrayList<CallModel> arrayList) {
+        mCallAdapter = new CallAdapter(arrayList, this);
+        mRecyclerView.setAdapter(mCallAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
-        mAdapter.notifyDataSetChanged();
+        mCallAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -154,7 +158,8 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
 
     @Override
     public void onAddItem(CallModel model) {
-        Log.d(TAG, new Gson().toJson(model));
+        mCallList.add(model);
+        mCallAdapter.notifyItemInserted(mCallList.size());
     }
 
     @Override
@@ -179,5 +184,14 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         }
     }
 
-
+    @Override
+    public void onRemoveItem(int position, CallModel model) {
+        if (mCallList != null && mCallList.size() > 0) {
+            //mArrayList.remove(model);
+            mCallList.remove(position);
+            mCallRecyclerView.removeViewAt(position);
+            mCallAdapter.notifyItemRemoved(position);
+            mCallAdapter.notifyItemRangeChanged(position, mCallList.size());
+        }
+    }
 }

@@ -181,7 +181,11 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private void getSpinnerData(Spinner spinner) {
         ArrayList<ContactModel> list = SharedPefManager.getInstance(getActivity()).getContactList();
-        if (mArrayList != null && mArrayList.size() > 0) {
+        if (list != null && list.size() > 0) {
+            if (mArrayList != null) {
+                mArrayList.clear();
+                mContacts.clear();
+            }
             mArrayList.addAll(list);
             for (ContactModel pc : mArrayList) {
                 mContacts.add(pc.getFullName());
@@ -241,7 +245,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 model.setCompany(com);
                 model.setDepartment(dept);
                 model.setDesignation(design);
-                model.setPhone(mobile);
+                model.setPhone("+88" + mobile);
                 model.setDescription(desc);
                 model.setImageName(mFile.getName());
                 model.setImagePath(mFile.getPath());

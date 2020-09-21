@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.subra.taskman.R;
+import com.subra.taskman.models.CallModel;
 import com.subra.taskman.models.MeetingModel;
 import com.subra.taskman.models.TaskModel;
 import com.subra.taskman.views.adapters.CallAdapter;
@@ -26,7 +27,7 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
-public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, TaskAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener {
+public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, TaskAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener, CallFragment.BottomSheetListener {
 
     private RecyclerView mMeetingRecyclerView;
     private ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
@@ -137,17 +138,6 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
     }
 
     @Override
-    public void onRemoveItem(int position, MeetingModel model) {
-        if (mMeetingList != null && mMeetingList.size() > 0) {
-            //mArrayList.remove(model);
-            mMeetingList.remove(position);
-            mMeetingRecyclerView.removeViewAt(position);
-            mMeetingAdapter.notifyItemRemoved(position);
-            mMeetingAdapter.notifyItemRangeChanged(position, mMeetingList.size());
-        }
-    }
-
-    @Override
     public void onAddItem(MeetingModel model) {
         mMeetingList.add(model);
         mMeetingAdapter.notifyItemInserted(mMeetingList.size());
@@ -160,6 +150,22 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
     }
 
     @Override
+    public void onAddItem(CallModel model) {
+        //
+    }
+
+    @Override
+    public void onRemoveItem(int position, MeetingModel model) {
+        if (mMeetingList != null && mMeetingList.size() > 0) {
+            //mArrayList.remove(model);
+            mMeetingList.remove(position);
+            mMeetingRecyclerView.removeViewAt(position);
+            mMeetingAdapter.notifyItemRemoved(position);
+            mMeetingAdapter.notifyItemRangeChanged(position, mMeetingList.size());
+        }
+    }
+
+    @Override
     public void onRemoveItem(int position, TaskModel model) {
         if (mTaskList != null && mTaskList.size() > 0) {
             //mArrayList.remove(model);
@@ -169,4 +175,6 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
             mTaskAdapter.notifyItemRangeChanged(position, mTaskList.size());
         }
     }
+
+
 }

@@ -4,6 +4,7 @@ public class CallModel {
 
     private String status;
     private ContactModel contact;
+    private String date;
     private String subject;
     private String type;
     private String purpose;
@@ -23,6 +24,14 @@ public class CallModel {
 
     public void setContact(ContactModel contact) {
         this.contact = contact;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getSubject() {

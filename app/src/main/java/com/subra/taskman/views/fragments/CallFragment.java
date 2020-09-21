@@ -57,8 +57,9 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private File mFile;
     private String currentPhotoPath;
-    ArrayList<ContactModel> mArrayList = new ArrayList<>();
-    ArrayList<String> mContacts = new ArrayList<>();
+    private ArrayList<ContactModel> mArrayList = new ArrayList<>();
+    private ArrayList<String> mContacts = new ArrayList<>();
+    private EditText callDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,29 +71,19 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         Spinner callStatus = (Spinner) view.findViewById(R.id.call_status);
         Spinner callContact = (Spinner) view.findViewById(R.id.call_contact);
         Spinner callType = (Spinner) view.findViewById(R.id.call_type);
+        callDate = (EditText) view.findViewById(R.id.call_date);
         EditText callSubject = (EditText) view.findViewById(R.id.call_subject);
         Spinner callPurpose = (Spinner) view.findViewById(R.id.call_purpose);
         Spinner callResult = (Spinner) view.findViewById(R.id.call_result);
         getSpinnerData(callContact);
 
-        ((ImageButton) view.findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-        ((ImageButton) view.findViewById(R.id.add_contact_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showContactDialog();
-            }
-        });
         ((ImageButton) view.findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String status = callStatus.getSelectedItem().toString();
                 String contact = callContact.getSelectedItem().toString();
                 String type = callType.getSelectedItem().toString();
+                String date = callDate.getText().toString().trim();
                 String subject = callSubject.getText().toString().trim();
                 String purpose = callPurpose.getSelectedItem().toString();
                 String result = callResult.getSelectedItem().toString();
@@ -105,14 +96,35 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 CallModel model = new CallModel();
                 model.setStatus(status);
                 model.setContact(mContact);
+                model.setDate(date);
                 model.setSubject(type);
                 model.setType(subject);
                 model.setPurpose(purpose);
                 model.setResult(result);
             }
         });
+        callDate.setOnClickListener(new ActionEventHandler());
+        ((ImageButton) view.findViewById(R.id.add_contact_button)).setOnClickListener(new ActionEventHandler());
+        ((ImageButton) view.findViewById(R.id.back_button)).setOnClickListener(new ActionEventHandler());
 
         return view;
+    }
+
+    private class ActionEventHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.back_button :
+                    dismiss();
+                    break;
+                case R.id.call_date :
+                    Utility.getInstance().getDateTimePickerDialog(getActivity(), callDate);
+                    break;
+                case R.id.add_contact_button :
+                    showContactDialog();
+                    break;
+            }
+        }
     }
 
     //===============================================| Remove modal dialog background scrim grey color

@@ -86,6 +86,30 @@
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_date"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/call_date"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:hint="From Date"
+                    android:drawableTint="@color/colorDeepGrey"
+                    android:drawableEnd="@drawable/ic_baseline_date_range_24"
+                    android:background="@drawable/shape_radius_100_edit_text"
+                    android:layout_marginBottom="10dp"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:focusableInTouchMode="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_call_subject"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxCornerRadiusTopStart="25dp"

@@ -49,6 +49,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private File mFile;
     private String currentPhotoPath;
+    private ContactModel mContact;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,8 +64,13 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 dismiss();
             }
         });
-
         ((ImageButton) view.findViewById(R.id.add_contact_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContactDialog();
+            }
+        });
+        ((ImageButton) view.findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
@@ -137,17 +143,18 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 String design = designation.getText().toString().trim();
                 String mobile = phone.getText().toString().trim();
                 String desc = description.getText().toString().trim();
-                ContactModel model = new ContactModel();
-                model.setFullName(name);
-                model.setEmail(mail);
-                model.setCompany(com);
-                model.setDepartment(dept);
-                model.setDesignation(design);
-                model.setPhone(mobile);
-                model.setDescription(desc);
-                model.setImageName(mFile.getName());
-                model.setImagePath(mFile.getPath());
+                mContact = new ContactModel();
+                mContact.setFullName(name);
+                mContact.setEmail(mail);
+                mContact.setCompany(com);
+                mContact.setDepartment(dept);
+                mContact.setDesignation(design);
+                mContact.setPhone(mobile);
+                mContact.setDescription(desc);
+                mContact.setImageName(mFile.getName());
+                mContact.setImagePath(mFile.getPath());
                 dialog.dismiss();
+                //Snackbar.make(getActivity().findViewById(android.R.id.content), "Your vendor's photo did not set", Snackbar.LENGTH_SHORT).show();
             }
         });
     }

@@ -88,6 +88,10 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     private String[] CAMERA_PERMISSIONS = { android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, };
     private String[] GALLERY_PERMISSIONS = { android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,};
 
+    //findViewById
+    private EditText mTitle, mDate, mDescription;
+    private Spinner mPriority, mStatus;
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -114,11 +118,11 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
 
         //------------------------------------------------| findViewById()
-        EditText mTitle = (EditText) view.findViewById(R.id.task_title);
-        EditText mDate = (EditText) view.findViewById(R.id.task_date);
-        Spinner mPriority = (Spinner) view.findViewById(R.id.task_priority);
-        Spinner mStatus = (Spinner) view.findViewById(R.id.task_status);
-        EditText mDescription = (EditText) view.findViewById(R.id.task_description);
+        mTitle = (EditText) view.findViewById(R.id.task_title);
+        mDate = (EditText) view.findViewById(R.id.task_date);
+        mPriority = (Spinner) view.findViewById(R.id.task_priority);
+        mStatus = (Spinner) view.findViewById(R.id.task_status);
+        mDescription = (EditText) view.findViewById(R.id.task_description);
         ((ImageButton) view.findViewById(R.id.add_attachment_button)).setOnClickListener(new ActionEventHandler());
         ((ImageButton) view.findViewById(R.id.add_record_button)).setOnClickListener(new ActionEventHandler());
         ((Button) view.findViewById(R.id.add_task_button)).setOnClickListener(new ActionEventHandler());
@@ -199,16 +203,26 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                     recordRequestPermissions();
                     break;
                 case R.id.add_task_button :
-                    //mListener.onAddItem(model);
-                    //dismiss();
+                    saveTask();
                     break;
             }
         }
     }
 
-    public void onAddAttachment(FileModel model) {
-        mAttachList.add(model);
-        mAttachAdapter.notifyItemInserted(mAttachList.size());
+    private void saveTask() {
+        String title = mTitle.getText().toString().trim(), date = mDate.getText().toString().trim(), description = mDescription.getText().toString().trim();
+        String status = mPriority.getSelectedItem().toString(), priority = mStatus.getSelectedItem().toString();
+        TaskModel model = new TaskModel();
+        model.setTitle(title);
+        model.setDate(date);
+        model.setDescription(description);
+        model.setStatus(status);
+        model.setPriority(priority);
+        model.setParticipants(null);
+        model.setAttachments(mAttachList);
+        model.setRecords(mRecordList);
+        mListener.onAddItem(model);
+        dismiss();
     }
 
     @Override

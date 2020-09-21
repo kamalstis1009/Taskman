@@ -1,6 +1,7 @@
 package com.subra.taskman.views.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -44,6 +45,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class CallFragment extends BottomSheetDialogFragment implements EasyPermissions.PermissionCallbacks {
+
+    private BottomSheetListener mListener;
+
+    public interface BottomSheetListener {
+        void onAddItem(CallModel model);
+    }
 
     private static final int ACTION_PICK_REQUEST_CODE = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 4;
@@ -105,10 +112,22 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 model.setType(subject);
                 model.setPurpose(purpose);
                 model.setResult(result);
+                mListener.onAddItem(model);
+                dismiss();
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (BottomSheetListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement BottomSheetListener");
+        }
     }
 
     private class ActionEventHandler implements View.OnClickListener {

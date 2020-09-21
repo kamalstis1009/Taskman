@@ -1,5 +1,7 @@
 package com.subra.taskman.models;
 
+import java.sql.Timestamp;
+
 public class CallModel {
 
     private String status;
@@ -9,6 +11,7 @@ public class CallModel {
     private String type;
     private String purpose;
     private String result;
+    private String createdAt = String.valueOf(new Timestamp(System.currentTimeMillis()));
 
     public String getStatus() {
         return status;
@@ -64,5 +67,13 @@ public class CallModel {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

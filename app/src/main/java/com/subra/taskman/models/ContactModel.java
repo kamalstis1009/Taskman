@@ -1,5 +1,7 @@
 package com.subra.taskman.models;
 
+import java.sql.Timestamp;
+
 public class ContactModel {
 
     private String id;
@@ -12,6 +14,7 @@ public class ContactModel {
     private String description;
     private String imageName;
     private String imagePath;
+    private String createdAt = String.valueOf(new Timestamp(System.currentTimeMillis()));
 
     public String getId() {
         return id;
@@ -91,5 +94,13 @@ public class ContactModel {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

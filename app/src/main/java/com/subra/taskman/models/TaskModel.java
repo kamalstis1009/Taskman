@@ -1,5 +1,6 @@
 package com.subra.taskman.models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class TaskModel {
@@ -12,6 +13,7 @@ public class TaskModel {
     private ArrayList<String> participants;
     private ArrayList<FileModel> attachments;
     private ArrayList<FileModel> records;
+    private String createdAt = String.valueOf(new Timestamp(System.currentTimeMillis()));
 
     public String getTitle() {
         return title;
@@ -75,5 +77,13 @@ public class TaskModel {
 
     public void setRecords(ArrayList<FileModel> records) {
         this.records = records;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

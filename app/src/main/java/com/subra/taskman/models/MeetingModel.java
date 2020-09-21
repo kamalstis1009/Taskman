@@ -1,5 +1,6 @@
 package com.subra.taskman.models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class MeetingModel {
@@ -12,6 +13,7 @@ public class MeetingModel {
     private ArrayList<String> participants;
     private String remarks;
     private String userId;
+    private String createdAt = String.valueOf(new Timestamp(System.currentTimeMillis()));
 
     public String getTitle() {
         return title;
@@ -75,5 +77,13 @@ public class MeetingModel {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

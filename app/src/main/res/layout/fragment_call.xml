@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".views.fragments.MeetingFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:scrollbars="none"
         android:fillViewport="true"
         android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                     android:singleLine="true"
                     android:hint="Subject"
                     android:drawableTint="@color/colorDeepGrey"
-                    android:drawableEnd="@drawable/ic_call_black_24dp"
+                    android:drawableEnd="@drawable/ic_baseline_title_24"
                     android:background="@drawable/shape_radius_100_edit_text"
                     android:layout_marginBottom="10dp"
                     android:paddingStart="25dp"
@@ -113,6 +113,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

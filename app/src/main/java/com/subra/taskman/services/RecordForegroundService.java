@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.subra.taskman.models.FileModel;
 import com.subra.taskman.utils.ConstantKey;
 
 import java.io.File;
@@ -43,21 +44,22 @@ public class RecordForegroundService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopRecording();
+        Toast.makeText(this, "Stop Recording", Toast.LENGTH_SHORT).show();
     }
 
     private void startRecording() {
         try {
             String path = getApplicationContext().getFilesDir().getPath();
-            File file = new File(path);
+            File file = new File(path, "records"); //child folder
             String mRecordName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
             mRecorder = new MediaRecorder();
-                    /*mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-                    mRecorder.setAudioChannels(1);
-                    mRecorder.setAudioSamplingRate(8000);
-                    mRecorder.setAudioEncodingBitRate(44100);
-                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);*/
+            /*mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+            mRecorder.setAudioChannels(1);
+            mRecorder.setAudioSamplingRate(8000);
+            mRecorder.setAudioEncodingBitRate(44100);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);*/
 
             mRecorder.reset();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -87,6 +89,23 @@ public class RecordForegroundService extends Service {
             isStarted = false;
         }
     }
+
+    /*private void getInternalStorageFiles() {
+        //String path = Environment.getExternalStorageDirectory().toString() + "/Testing"; //getExternalFilesDir(), getExternalCacheDir(), or getExternalMediaDir()
+        //String path = this.getApplicationContext().getFilesDir() + "/system_sound"; //file.getAbsolutePath()
+        //String[] listOfFiles = Environment.getExternalStoragePublicDirectory (Environment.DIRECTORY_DOWNLOADS).list();
+
+        String path = getActivity().getFilesDir().getPath() + "/records/";
+        File[] files = new File(path).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                mRecordList.add(new FileModel(file.getName(), path));
+            }
+        }
+        if (mRecordList != null && mRecordList.size() > 0) {
+            initRecyclerView2(mRecordRecyclerView, mRecordList);
+        }
+    }*/
 
 
 }

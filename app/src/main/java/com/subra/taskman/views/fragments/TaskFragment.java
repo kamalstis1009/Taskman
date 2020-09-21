@@ -1,21 +1,14 @@
 package com.subra.taskman.views.fragments;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +22,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -39,13 +31,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.gson.Gson;
 import com.subra.taskman.R;
 import com.subra.taskman.models.FileModel;
-import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.models.TaskModel;
 import com.subra.taskman.services.RecordForegroundService;
 import com.subra.taskman.utils.ConstantKey;
-import com.subra.taskman.utils.PermissionUtils;
 import com.subra.taskman.utils.TimeCount;
 import com.subra.taskman.utils.Utility;
 import com.subra.taskman.views.adapters.AttachmentAdapter;
@@ -55,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -67,14 +58,15 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     private BottomSheetListener mListener;
 
     public interface BottomSheetListener {
-        void onAddItem(MeetingModel model);
+        void onAddItem(TaskModel model);
     }
 
     private static final int ACTION_PICK_REQUEST_CODE = 1;
-    private static final int REQUEST_CODE = 2;
-    private static final int REQUEST_CODE_CAMERA = 3;
     private static final int REQUEST_IMAGE_CAPTURE = 4;
-    private static final int REQUEST_RECORD = 5;
+
+    private static final int REQUEST_RECORD = 101;
+    private static final int REQUEST_CAMERA = 102;
+    private static final int REQUEST_GALLERY = 103;
 
     private ArrayList<FileModel> mAttachList = new ArrayList<>();
     private RecyclerView mAttachRecyclerView;
@@ -89,15 +81,9 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     private String currentPhotoPath;
 
     //Record
-    private String[] PERMISSIONS = {
-            android.Manifest.permission.RECORD_AUDIO,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    };
-    private String mRecordName;
-    private String mRecordFilePath;
-    private boolean isStarted;
-    private MediaRecorder mRecorder;
+    private String[] RECORD_PERMISSIONS = { android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, };
+    private String[] CAMERA_PERMISSIONS = { android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, };
+    private String[] GALLERY_PERMISSIONS = { android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -181,7 +167,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                     showDialog();
                     break;
                 case R.id.add_record_button :
-                    requestPermissions();
+                    recordRequestPermissions();
                     break;
                 case R.id.add_task_button :
                     //mListener.onAddItem(model);
@@ -245,14 +231,36 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     }
 
     //====================================================| For Record
-    @AfterPermissionGranted(REQUEST_RECORD)
-    private void requestPermissions() {
-        if (EasyPermissions.hasPermissions(getActivity(), PERMISSIONS)) {
+    //@AfterPermissionGranted(REQUEST_RECORD)
+    private void recordRequestPermissions() {
+        if (EasyPermissions.hasPermissions(getActivity(), RECORD_PERMISSIONS)) {
             // Already have permission, do the thing
             showRecordDialog();
         } else {
             // Do not have permissions, request them now
-            EasyPermissions.requestPermissions(this, "This app needs access to your camera and mic to make video calls", REQUEST_RECORD, PERMISSIONS);
+            EasyPermissions.requestPermissions(this, "This app needs access to your mic to make record voice", REQUEST_RECORD, RECORD_PERMISSIONS);
+        }
+    }
+
+    //@AfterPermissionGranted(REQUEST_CAMERA)
+    private void cameraRequestPermissions() {
+        if (EasyPermissions.hasPermissions(getActivity(), CAMERA_PERMISSIONS)) {
+            // Already have permission, do the thing
+            getCamera();
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, "This app needs access to your camera to capture photo", REQUEST_CAMERA, CAMERA_PERMISSIONS);
+        }
+    }
+
+    //@AfterPermissionGranted(REQUEST_GALLERY)
+    private void galleryRequestPermissions() {
+        if (EasyPermissions.hasPermissions(getActivity(), GALLERY_PERMISSIONS)) {
+            // Already have permission, do the thing
+            getGallery();
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, "This app needs access to your gallery to access images", REQUEST_GALLERY, GALLERY_PERMISSIONS);
         }
     }
 
@@ -263,9 +271,17 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     }
 
     @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> permissions) {
         // Some permissions have been granted
-        showRecordDialog();
+        if (Arrays.equals(permissions.toArray(new String[0]), RECORD_PERMISSIONS)) {
+            showRecordDialog();
+        }
+        if (Arrays.equals(permissions.toArray(new String[0]), CAMERA_PERMISSIONS)) {
+            getCamera();
+        }
+        if (Arrays.equals(permissions.toArray(new String[0]), GALLERY_PERMISSIONS)) {
+            getGallery();
+        }
     }
 
     @Override
@@ -334,77 +350,17 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         context.stopService(new Intent(context, RecordForegroundService.class)); //ForegroundService
     }
 
-    //===============================================| Recording Task
-    private class BackTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... params) {
-            if (params[0].equals("start")) {
-                try {
-                    String path = getActivity().getFilesDir().getPath();
-                    File file = new File(path);
-                    mRecordName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-                    mRecorder = new MediaRecorder();
-                    /*mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-                    mRecorder.setAudioChannels(1);
-                    mRecorder.setAudioSamplingRate(8000);
-                    mRecorder.setAudioEncodingBitRate(44100);
-                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);*/
-
-                    mRecorder.reset();
-                    mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-                    if (!file.exists()){
-                        file.mkdirs();
-                    }
-                    mRecordFilePath = file+"/" + "REC_" + mRecordName + ".3gp";
-                    mRecorder.setOutputFile(mRecordFilePath);
-
-                    mRecorder.prepare();
-                    mRecorder.start();
-                    isStarted = true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (params[0].equals("stop")) {
-                if (isStarted && mRecorder != null) {
-                    mRecorder.stop();
-                    mRecorder.reset(); // You can reuse the object by going back to setAudioSource() step
-                    mRecorder.release();
-                    mRecorder = null;
-                    isStarted = false;
-
-                    if (mRecordName != null && mRecordFilePath != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getInternalStorageFiles();
-                            }
-                        });
-
-                    }
-                }
-            }
-            return null;
-        }
-    }
-
     //===============================================| Get all records file from Storage
     private void getInternalStorageFiles() {
         //String path = Environment.getExternalStorageDirectory().toString() + "/Testing"; //getExternalFilesDir(), getExternalCacheDir(), or getExternalMediaDir()
         //String path = this.getApplicationContext().getFilesDir() + "/system_sound"; //file.getAbsolutePath()
         //String[] listOfFiles = Environment.getExternalStoragePublicDirectory (Environment.DIRECTORY_DOWNLOADS).list();
 
-        String path = getActivity().getFilesDir().getPath();
-        String[] listOfFiles = getActivity().getFilesDir().list();
-        Log.d(TAG, "Files: " + new Gson().toJson(listOfFiles));
-        if (listOfFiles != null) {
-            for (String fileName : listOfFiles) {
-                mRecordList.add(new FileModel(fileName, path));
+        String path = getActivity().getFilesDir().getPath() + "/records/";
+        File[] files = new File(path).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                mRecordList.add(new FileModel(file.getName(), path));
             }
         }
         if (mRecordList != null && mRecordList.size() > 0) {
@@ -424,22 +380,14 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         ((ImageButton) view.findViewById(R.id.camera_id)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
-                } else {
-                    getCamera();
-                }
+                cameraRequestPermissions();
                 dialog.dismiss();
             }
         });
         ((ImageButton) view.findViewById(R.id.gallery_id)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-                } else {
-                    getImage();
-                }
+                galleryRequestPermissions();
                 dialog.dismiss();
             }
         });
@@ -474,7 +422,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         return null;
     }
 
-    private void getImage() {
+    private void getGallery() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), ACTION_PICK_REQUEST_CODE);
     }
 
@@ -496,20 +444,6 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
         }
     }
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getImage();
-        }
-        if (requestCode == REQUEST_CODE_CAMERA) {
-            getCamera();
-        }
-        if (requestCode == REQUEST_RECORD) {
-            showRecordDialog();
-        }
-    }*/
 
 
 }

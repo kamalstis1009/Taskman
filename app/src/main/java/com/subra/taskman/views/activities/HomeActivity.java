@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 
 import com.subra.taskman.R;
 import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.models.TaskModel;
 import com.subra.taskman.views.adapters.CallAdapter;
 import com.subra.taskman.views.adapters.MeetingAdapter;
 import com.subra.taskman.views.adapters.TaskAdapter;
@@ -146,5 +147,10 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
     public void onAddItem(MeetingModel model) {
         mMeetingList.add(model);
         mMeetingAdapter.notifyItemInserted(mMeetingList.size());
+    }
+
+    @Override
+    public void onAddItem(TaskModel model) {
+        //
     }
 }

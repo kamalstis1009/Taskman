@@ -572,7 +572,7 @@ public class Utility {
     }
 
     public String saveToInternalStorage(Context context, Bitmap bitmapImage, String imageName){
-        File directory = new File(context.getFilesDir() + "/AppPhoto/");
+        File directory = new File(context.getFilesDir() + "/images/");
         directory.mkdir(); //Create imageDir
         File file = new File(directory, imageName);
         try {

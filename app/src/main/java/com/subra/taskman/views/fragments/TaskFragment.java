@@ -329,6 +329,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             //imageView.setImageBitmap(bitmap);
             String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
             mFile = new File(mImagePath, mImgName);
+            getInternalStorageImages();
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && currentPhotoPath != null) {
             Uri uri = Uri.fromFile(new File(currentPhotoPath));
@@ -336,6 +337,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             //imageView.setImageBitmap(bitmap);
             String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
             mFile = new File(mImagePath, mImgName);
+            getInternalStorageImages();
         }
     }
 
@@ -401,24 +403,6 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         context.stopService(new Intent(context, RecordForegroundService.class)); //ForegroundService
     }
 
-    private void getInternalStorageFiles() {
-        //String path = Environment.getExternalStorageDirectory().toString() + "/Testing"; //getExternalFilesDir(), getExternalCacheDir(), or getExternalMediaDir()
-        //String path = this.getApplicationContext().getFilesDir() + "/system_sound"; //file.getAbsolutePath()
-        //String[] listOfFiles = Environment.getExternalStoragePublicDirectory (Environment.DIRECTORY_DOWNLOADS).list();
-
-        String path = getActivity().getFilesDir().getPath() + "/records/";
-        File[] files = new File(path).listFiles();
-        if (files != null) {
-            for (File file : files) {
-                mRecordList.add(new FileModel(file.getName(), path));
-            }
-        }
-        if (mRecordList != null && mRecordList.size() > 0) {
-            initRecyclerView2(mRecordRecyclerView, mRecordList);
-        }
-    }
-
-
     //====================================================| Camera and Gallery Dialog
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -474,6 +458,41 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private void getGallery() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), ACTION_PICK_REQUEST_CODE);
+    }
+
+    //====================================================| Get Internal Storage Files
+    private void getInternalStorageImages() {
+        //String path = Environment.getExternalStorageDirectory().toString() + "/Testing"; //getExternalFilesDir(), getExternalCacheDir(), or getExternalMediaDir()
+        //String path = this.getApplicationContext().getFilesDir() + "/system_sound"; //file.getAbsolutePath()
+        //String[] listOfFiles = Environment.getExternalStoragePublicDirectory (Environment.DIRECTORY_DOWNLOADS).list();
+
+        String path = getActivity().getFilesDir().getPath() + "/images/";
+        File[] files = new File(path).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                mAttachList.add(new FileModel(file.getName(), path));
+            }
+        }
+        if (mAttachList != null && mAttachList.size() > 0) {
+            initRecyclerView1(mAttachRecyclerView, mAttachList);
+        }
+    }
+
+    private void getInternalStorageFiles() {
+        //String path = Environment.getExternalStorageDirectory().toString() + "/Testing"; //getExternalFilesDir(), getExternalCacheDir(), or getExternalMediaDir()
+        //String path = this.getApplicationContext().getFilesDir() + "/system_sound"; //file.getAbsolutePath()
+        //String[] listOfFiles = Environment.getExternalStoragePublicDirectory (Environment.DIRECTORY_DOWNLOADS).list();
+
+        String path = getActivity().getFilesDir().getPath() + "/records/";
+        File[] files = new File(path).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                mRecordList.add(new FileModel(file.getName(), path));
+            }
+        }
+        if (mRecordList != null && mRecordList.size() > 0) {
+            initRecyclerView2(mRecordRecyclerView, mRecordList);
+        }
     }
 
 }

@@ -38,8 +38,10 @@ public class RecordForegroundService extends Service {
         if (intent.getExtras() != null) {
             if (intent.getExtras().containsKey(ConstantKey.RECORDING)) {
                 final String value = intent.getStringExtra(ConstantKey.RECORDING);
-                startRecording();
-                Toast.makeText(this, "Start Recording", Toast.LENGTH_SHORT).show();
+                if (value.equals("START")) {
+                    startRecording();
+                    Toast.makeText(this, "Start Recording", Toast.LENGTH_SHORT).show();
+                }
             }
         }
         return START_NOT_STICKY;
@@ -48,6 +50,7 @@ public class RecordForegroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopRecording();
         Toast.makeText(this, "Stop Recording", Toast.LENGTH_SHORT).show();
     }
 

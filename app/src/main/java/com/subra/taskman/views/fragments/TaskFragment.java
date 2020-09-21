@@ -388,7 +388,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             @Override
             public void onClick(View v) {
                 //new BackTask().execute("start");
-                startMyService(ConstantKey.RECORDING, "Nothing");
+                startMyService(ConstantKey.RECORDING, "START");
                 recordBtn.setEnabled(false);
                 stopBtn.setEnabled(true);
                 TimeCount.getInstance().getCounter(new TimeCount.ShowCounter() {
@@ -420,17 +420,11 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     }
 
     private void startMyService(String key, String value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ContextCompat.startForegroundService(getActivity(), new Intent(getActivity(), RecordForegroundService.class));
-        } else {
-            getActivity().startService(new Intent(getActivity(), RecordForegroundService.class));
-        }
-
-        /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             ContextCompat.startForegroundService(getActivity(), new Intent(getActivity(), RecordForegroundService.class).putExtra(key, value)); //ForegroundService
         } else {
             getActivity().startService(new Intent(getActivity(), RecordForegroundService.class).putExtra(key, value)); //BackgroundService
-        }*/
+        }
     }
 
     private void stopMyService() {

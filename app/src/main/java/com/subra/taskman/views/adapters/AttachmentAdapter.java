@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.subra.taskman.R;
 import com.subra.taskman.models.FileModel;
+import com.subra.taskman.utils.Utility;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.MyViewHolder> {
 
@@ -44,6 +47,8 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.My
         holder.file.setText(model.getFileName());
         holder.path.setText(model.getFilePath());
 
+        holder.imageView.setImageBitmap(Utility.getInstance().loadImage(model.getFilePath(), model.getFileName()));
+
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,10 +63,12 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+        CircleImageView imageView;
         ImageButton button;
         TextView file, path;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageView = (CircleImageView) itemView.findViewById(R.id.item_photo);
             button = (ImageButton) itemView.findViewById(R.id.remove_item_button);
             file = (TextView) itemView.findViewById(R.id.file_name);
             path = (TextView) itemView.findViewById(R.id.file_path);

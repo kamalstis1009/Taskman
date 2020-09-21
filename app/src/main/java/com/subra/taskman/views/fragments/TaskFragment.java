@@ -127,6 +127,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         //-----------------------------------------------| Attachment
         mAttachRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_attachment);
         initRecyclerView1(mAttachRecyclerView, mAttachList);
+        getInternalStorageImages();
 
         //-----------------------------------------------| Record
         mRecordRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_record);
@@ -212,12 +213,20 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
     @Override
     public void onRemoveAttachment(int position, FileModel model) {
-        if (mAttachList != null && mAttachList.size() > 0) {
-            //mArrayList.remove(model);
-            mAttachList.remove(position);
-            mAttachRecyclerView.removeViewAt(position);
-            mAttachAdapter.notifyItemRemoved(position);
-            mAttachAdapter.notifyItemRangeChanged(position, mAttachList.size());
+        File file = new File(model.getFilePath()+"/"+model.getFileName());
+        if (file.exists()) {
+            if (file.delete()) {
+                Toast.makeText(getActivity(), "Deleted the file successfully", Toast.LENGTH_SHORT).show();
+                if (mAttachList != null && mAttachList.size() > 0) {
+                    //mArrayList.remove(model);
+                    mAttachList.remove(position);
+                    mAttachRecyclerView.removeViewAt(position);
+                    mAttachAdapter.notifyItemRemoved(position);
+                    mAttachAdapter.notifyItemRangeChanged(position, mAttachList.size());
+                }
+            } else {
+                Toast.makeText(getActivity(), "Did not delete this file " + model.getFileName(), Toast.LENGTH_SHORT).show();
+            };
         }
     }
 

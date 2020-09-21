@@ -322,19 +322,20 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        String mImgName = "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg";
         if (requestCode == ACTION_PICK_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
             Uri uri = data.getData();
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
             //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
-            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
+            mFile = new File(mImagePath, mImgName);
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && currentPhotoPath != null) {
             Uri uri = Uri.fromFile(new File(currentPhotoPath));
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
             //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
-            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
+            mFile = new File(mImagePath, mImgName);
         }
     }
 

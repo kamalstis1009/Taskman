@@ -24,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.subra.taskman.R;
+import com.subra.taskman.models.ContactModel;
 import com.subra.taskman.utils.Utility;
 
 import java.io.File;
@@ -60,6 +61,12 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
             @Override
             public void onClick(View view) {
                 dismiss();
+            }
+        });
+
+        ((ImageButton) view.findViewById(R.id.add_contact_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
             }
         });
 
@@ -117,12 +124,29 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         ((CircleImageView) view.findViewById(R.id.person_photo)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                showDialog();
             }
         });
         ((Button) view.findViewById(R.id.add_contact_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String name = fullName.getText().toString().trim();
+                String mail = email.getText().toString().trim();
+                String com = company.getText().toString().trim();
+                String dept = department.getText().toString().trim();
+                String design = designation.getText().toString().trim();
+                String mobile = phone.getText().toString().trim();
+                String desc = description.getText().toString().trim();
+                ContactModel model = new ContactModel();
+                model.setFullName(name);
+                model.setEmail(mail);
+                model.setCompany(com);
+                model.setDepartment(dept);
+                model.setDesignation(design);
+                model.setPhone(mobile);
+                model.setDescription(desc);
+                model.setImageName(mFile.getName());
+                model.setImagePath(mFile.getPath());
                 dialog.dismiss();
             }
         });

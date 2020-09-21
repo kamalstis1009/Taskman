@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4">
                     <ImageButton
-                        android:id="@+id/location_button"
+                        android:id="@+id/add_contact_button"
                         android:background="@drawable/shape_radius_100_edit_text"
                         android:tint="@color/colorPrimary"
                         android:src="@drawable/ic_add_black_24dp"

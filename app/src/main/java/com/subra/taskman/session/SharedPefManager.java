@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.subra.taskman.models.CallModel;
 import com.subra.taskman.models.ContactModel;
 import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.models.TaskModel;
 import com.subra.taskman.models.UserModel;
 
 import java.util.ArrayList;
@@ -142,6 +144,80 @@ public class SharedPefManager {
             if (model != null) {
                 mArrayList.add(model);
                 editor.putString("MeetingModel", new Gson().toJson(mArrayList));
+                editor.apply();
+                editor.commit(); //for old version
+            }
+        }
+    }
+
+    //===============================================| TaskModel
+    public void saveTask(TaskModel model){
+        SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        ArrayList<TaskModel> mArrayList = new ArrayList<>();
+        ArrayList<TaskModel> models = getTaskList();
+        if (models != null) {
+            if (model != null) {
+                models.add(model);
+                editor.putString("TaskModel", new Gson().toJson(models));
+            }
+        } else {
+            mArrayList.add(model);
+            editor.putString("TaskModel", new Gson().toJson(mArrayList));
+        }
+        editor.apply();
+        editor.commit(); //for old version
+    }
+    public ArrayList<TaskModel> getTaskList(){
+        SharedPreferences ref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return new Gson().fromJson(ref.getString("TaskModel", null), new TypeToken<ArrayList<TaskModel>>(){}.getType());
+    }
+    public void removeTask(TaskModel model, int position){
+        SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        ArrayList<TaskModel> mArrayList = getTaskList();
+        if (mArrayList != null) {
+            if (model != null) {
+                mArrayList.remove(position);
+                editor.putString("TaskModel", new Gson().toJson(mArrayList));
+                editor.apply();
+                editor.commit(); //for old version
+            }
+        }
+    }
+
+    //===============================================| CallModel
+    public void saveCall(CallModel model){
+        SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        ArrayList<CallModel> mArrayList = new ArrayList<>();
+        ArrayList<CallModel> models = getCallList();
+        if (models != null) {
+            if (model != null) {
+                models.add(model);
+                editor.putString("CallModel", new Gson().toJson(models));
+            }
+        } else {
+            mArrayList.add(model);
+            editor.putString("CallModel", new Gson().toJson(mArrayList));
+        }
+        editor.apply();
+        editor.commit(); //for old version
+    }
+    public ArrayList<CallModel> getCallList(){
+        SharedPreferences ref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return new Gson().fromJson(ref.getString("CallModel", null), new TypeToken<ArrayList<CallModel>>(){}.getType());
+    }
+    public void removeCall(CallModel model, int position){
+        SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        ArrayList<CallModel> mArrayList = getCallList();
+        if (mArrayList != null) {
+            if (model != null) {
+                mArrayList.remove(position);
+                editor.putString("CallModel", new Gson().toJson(mArrayList));
                 editor.apply();
                 editor.commit(); //for old version
             }

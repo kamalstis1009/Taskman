@@ -13,6 +13,7 @@ import com.subra.taskman.R;
 import com.subra.taskman.models.CallModel;
 import com.subra.taskman.models.MeetingModel;
 import com.subra.taskman.models.TaskModel;
+import com.subra.taskman.session.SharedPefManager;
 import com.subra.taskman.views.adapters.CallAdapter;
 import com.subra.taskman.views.adapters.MeetingAdapter;
 import com.subra.taskman.views.adapters.TaskAdapter;
@@ -76,6 +77,8 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         });
 
         //-----------------------------------------------| Meeting
+        ArrayList<MeetingModel> mMeetings = SharedPefManager.getInstance(this).getMeetingList();
+        mMeetingList.addAll(mMeetings);
         mMeetingRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_meeting);
         initRecyclerView(mMeetingRecyclerView, mMeetingList);
         ((ImageButton) findViewById(R.id.add_meeting_button)).setOnClickListener(new View.OnClickListener() {
@@ -146,18 +149,21 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
     public void onAddItem(MeetingModel model) {
         mMeetingList.add(model);
         mMeetingAdapter.notifyItemInserted(mMeetingList.size());
+        SharedPefManager.getInstance(this).saveMeeting(model);
     }
 
     @Override
     public void onAddItem(TaskModel model) {
         mTaskList.add(model);
         mTaskAdapter.notifyItemInserted(mTaskList.size());
+        SharedPefManager.getInstance(this).saveTask(model);
     }
 
     @Override
     public void onAddItem(CallModel model) {
         mCallList.add(model);
         mCallAdapter.notifyItemInserted(mCallList.size());
+        SharedPefManager.getInstance(this).saveCall(model);
     }
 
     @Override
@@ -168,6 +174,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
             mMeetingRecyclerView.removeViewAt(position);
             mMeetingAdapter.notifyItemRemoved(position);
             mMeetingAdapter.notifyItemRangeChanged(position, mMeetingList.size());
+            SharedPefManager.getInstance(this).removeMeeting(model, position);
         }
     }
 
@@ -179,6 +186,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
             mTaskRecyclerView.removeViewAt(position);
             mTaskAdapter.notifyItemRemoved(position);
             mTaskAdapter.notifyItemRangeChanged(position, mTaskList.size());
+            SharedPefManager.getInstance(this).removeTask(model, position);
         }
     }
 
@@ -190,6 +198,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
             mCallRecyclerView.removeViewAt(position);
             mCallAdapter.notifyItemRemoved(position);
             mCallAdapter.notifyItemRangeChanged(position, mCallList.size());
+            SharedPefManager.getInstance(this).removeCall(model, position);
         }
     }
 }

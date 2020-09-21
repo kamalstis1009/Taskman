@@ -123,6 +123,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         mPriority = (Spinner) view.findViewById(R.id.task_priority);
         mStatus = (Spinner) view.findViewById(R.id.task_status);
         mDescription = (EditText) view.findViewById(R.id.task_description);
+        mDate.setOnClickListener(new ActionEventHandler());
         ((ImageButton) view.findViewById(R.id.add_attachment_button)).setOnClickListener(new ActionEventHandler());
         ((ImageButton) view.findViewById(R.id.add_record_button)).setOnClickListener(new ActionEventHandler());
         ((Button) view.findViewById(R.id.add_task_button)).setOnClickListener(new ActionEventHandler());
@@ -196,8 +197,11 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                 case R.id.back_button :
                     dismiss();
                     break;
+                case R.id.task_date :
+                    saveTask();
+                    break;
                 case R.id.add_attachment_button :
-                    showDialog();
+                    Utility.getInstance().getDateTimePickerDialog(getActivity(), mDate);
                     break;
                 case R.id.add_record_button :
                     recordRequestPermissions();

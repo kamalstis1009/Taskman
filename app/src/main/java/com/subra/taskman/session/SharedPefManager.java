@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.subra.taskman.models.ContactModel;
 import com.subra.taskman.models.MeetingModel;
 import com.subra.taskman.models.UserModel;
 
@@ -66,27 +67,27 @@ public class SharedPefManager {
     }
 
     //===============================================| Your Product
-    public void saveMeetingModels(MeetingModel model){
+    public void saveContact(ContactModel model){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        ArrayList<MeetingModel> mArrayList = new ArrayList<>();
-        ArrayList<MeetingModel> products = getMeetingModels();
+        ArrayList<ContactModel> mArrayList = new ArrayList<>();
+        ArrayList<ContactModel> products = getContactList();
         if (products != null) {
             if (model != null) {
                 products.add(model);
-                editor.putString("MeetingModel", new Gson().toJson(products));
+                editor.putString("ContactModel", new Gson().toJson(products));
             }
         } else {
             mArrayList.add(model);
-            editor.putString("MeetingModel", new Gson().toJson(mArrayList));
+            editor.putString("ContactModel", new Gson().toJson(mArrayList));
         }
         editor.apply();
         editor.commit(); //for old version
     }
-    public ArrayList<MeetingModel> getMeetingModels(){
+    public ArrayList<ContactModel> getContactList(){
         SharedPreferences ref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return new Gson().fromJson(ref.getString("MeetingModel", null), new TypeToken<ArrayList<MeetingModel>>(){}.getType());
+        return new Gson().fromJson(ref.getString("ContactModel", null), new TypeToken<ArrayList<ContactModel>>(){}.getType());
     }
 
     //===============================================| MeetingModel

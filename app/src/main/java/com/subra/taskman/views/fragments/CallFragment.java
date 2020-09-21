@@ -14,25 +14,33 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 import com.subra.taskman.R;
+import com.subra.taskman.models.CallModel;
 import com.subra.taskman.models.ContactModel;
+import com.subra.taskman.session.SharedPefManager;
 import com.subra.taskman.utils.Utility;
+import com.subra.taskman.views.adapters.CustomDropDownAdapter;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -49,7 +57,8 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private File mFile;
     private String currentPhotoPath;
-    private ContactModel mContact;
+    ArrayList<ContactModel> mArrayList = new ArrayList<>();
+    ArrayList<String> mContacts = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +66,14 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
 
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
+
+        Spinner callStatus = (Spinner) view.findViewById(R.id.call_status);
+        Spinner callContact = (Spinner) view.findViewById(R.id.call_contact);
+        Spinner callType = (Spinner) view.findViewById(R.id.call_type);
+        EditText callSubject = (EditText) view.findViewById(R.id.call_subject);
+        Spinner callPurpose = (Spinner) view.findViewById(R.id.call_purpose);
+        Spinner callResult = (Spinner) view.findViewById(R.id.call_result);
+        getSpinnerData(callContact);
 
         ((ImageButton) view.findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +90,25 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         ((ImageButton) view.findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String status = callStatus.getSelectedItem().toString();
+                String contact = callContact.getSelectedItem().toString();
+                String type = callType.getSelectedItem().toString();
+                String subject = callSubject.getText().toString().trim();
+                String purpose = callPurpose.getSelectedItem().toString();
+                String result = callResult.getSelectedItem().toString();
+
+                ContactModel mContact = null;
+                for(ContactModel cm : mArrayList) {
+                    if(cm.getFullName().equals(contact)) mContact = cm;
+                }
+
+                CallModel model = new CallModel();
+                model.setStatus(status);
+                model.setContact(mContact);
+                model.setSubject(type);
+                model.setType(subject);
+                model.setPurpose(purpose);
+                model.setResult(result);
             }
         });
 
@@ -110,6 +146,25 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         });
     }
 
+    private void getSpinnerData(Spinner spinner) {
+        ArrayList<ContactModel> list = SharedPefManager.getInstance(getActivity()).getContactList();
+        mArrayList.addAll(list);
+        for(ContactModel pc : mArrayList) {
+            mContacts.add(pc.getFullName());
+        }
+        CustomDropDownAdapter mAdapter = new CustomDropDownAdapter(getActivity(), mContacts);
+        spinner.setAdapter(mAdapter);
+
+        //ArrayList<String> mUnits = ConstantKey.getProductCategory();
+        //ArrayAdapter mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mNames);
+        //mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //CustomDropDownAdapter mAdapter = new CustomDropDownAdapter(getActivity(), mUnits);
+        //productCategory.setAdapter(mAdapter);
+        // Set default value from preference
+        //mSpinner.setSelection(2); //by position
+        //districts.setSelection(mAdapter.getPosition(name)); //by value
+    }
+
     //====================================================|
     private void showContactDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -143,16 +198,18 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 String design = designation.getText().toString().trim();
                 String mobile = phone.getText().toString().trim();
                 String desc = description.getText().toString().trim();
-                mContact = new ContactModel();
-                mContact.setFullName(name);
-                mContact.setEmail(mail);
-                mContact.setCompany(com);
-                mContact.setDepartment(dept);
-                mContact.setDesignation(design);
-                mContact.setPhone(mobile);
-                mContact.setDescription(desc);
-                mContact.setImageName(mFile.getName());
-                mContact.setImagePath(mFile.getPath());
+                ContactModel model = new ContactModel();
+                model.setId(UUID.randomUUID().toString());
+                model.setFullName(name);
+                model.setEmail(mail);
+                model.setCompany(com);
+                model.setDepartment(dept);
+                model.setDesignation(design);
+                model.setPhone(mobile);
+                model.setDescription(desc);
+                model.setImageName(mFile.getName());
+                model.setImagePath(mFile.getPath());
+                SharedPefManager.getInstance(getActivity()).saveContact(model);
                 dialog.dismiss();
                 //Snackbar.make(getActivity().findViewById(android.R.id.content), "Your vendor's photo did not set", Snackbar.LENGTH_SHORT).show();
             }

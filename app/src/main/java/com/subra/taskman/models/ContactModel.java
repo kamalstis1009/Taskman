@@ -2,6 +2,7 @@ package com.subra.taskman.models;
 
 public class ContactModel {
 
+    private String id;
     private String fullName;
     private String email;
     private String company;
@@ -11,6 +12,14 @@ public class ContactModel {
     private String description;
     private String imageName;
     private String imagePath;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFullName() {
         return fullName;

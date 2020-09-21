@@ -2,19 +2,19 @@ package com.subra.taskman.models;
 
 public class CallModel {
 
-    private String type;
+    private String status;
     private ContactModel contact;
     private String subject;
-    private String callType;
-    private String callPurpose;
-    private String callResult;
+    private String type;
+    private String purpose;
+    private String result;
 
-    public String getType() {
-        return type;
+    public String getStatus() {
+        return status;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ContactModel getContact() {
@@ -33,27 +33,27 @@ public class CallModel {
         this.subject = subject;
     }
 
-    public String getCallType() {
-        return callType;
+    public String getType() {
+        return type;
     }
 
-    public void setCallType(String callType) {
-        this.callType = callType;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getCallPurpose() {
-        return callPurpose;
+    public String getPurpose() {
+        return purpose;
     }
 
-    public void setCallPurpose(String callPurpose) {
-        this.callPurpose = callPurpose;
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 
-    public String getCallResult() {
-        return callResult;
+    public String getResult() {
+        return result;
     }
 
-    public void setCallResult(String callResult) {
-        this.callResult = callResult;
+    public void setResult(String result) {
+        this.result = result;
     }
 }

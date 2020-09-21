@@ -43,7 +43,7 @@ public class RecordForegroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopRecording();
+        //stopRecording();
         Toast.makeText(this, "Stop Recording", Toast.LENGTH_SHORT).show();
     }
 
@@ -87,7 +87,7 @@ public class RecordForegroundService extends Service {
             mRecorder.release();
             mRecorder = null;
             isStarted = false;
-            publishResults();
+            //publishResults();
         }
     }
 

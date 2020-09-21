@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.subra.taskman">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -43,6 +44,12 @@
             android:name=".services.RecordForegroundService"
             android:enabled="true"
             android:exported="false" />
+
+        <!-- Worker -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="location|microphone"
+            tools:node="merge" />
 
         <activity android:name=".views.activities.MainActivity">
             <intent-filter>

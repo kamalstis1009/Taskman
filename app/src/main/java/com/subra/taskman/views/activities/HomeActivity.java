@@ -78,7 +78,9 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
 
         //-----------------------------------------------| Meeting
         ArrayList<MeetingModel> mMeetings = SharedPefManager.getInstance(this).getMeetingList();
-        mMeetingList.addAll(mMeetings);
+        if (mMeetings != null && mMeetings.size() > 0) {
+            mMeetingList.addAll(mMeetings);
+        }
         mMeetingRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_meeting);
         initRecyclerView(mMeetingRecyclerView, mMeetingList);
         ((ImageButton) findViewById(R.id.add_meeting_button)).setOnClickListener(new View.OnClickListener() {
@@ -92,6 +94,10 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         });
 
         //-----------------------------------------------| Task
+        ArrayList<TaskModel> mTasks = SharedPefManager.getInstance(this).getTaskList();
+        if (mTasks != null && mTasks.size() > 0) {
+            mTaskList.addAll(mTasks);
+        }
         mTaskRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_task);
         initRecyclerView2(mTaskRecyclerView, mTaskList);
         ((ImageButton) findViewById(R.id.add_task_button)).setOnClickListener(new View.OnClickListener() {
@@ -105,6 +111,10 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         });
 
         //-----------------------------------------------| Call
+        ArrayList<CallModel> mCalls = SharedPefManager.getInstance(this).getCallList();
+        if (mCalls != null && mCalls.size() > 0) {
+            mCallList.addAll(mCalls);
+        }
         mCallRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_call);
         initRecyclerView3(mCallRecyclerView, mCallList);
         ((ImageButton) findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {

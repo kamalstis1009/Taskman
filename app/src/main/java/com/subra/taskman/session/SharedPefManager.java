@@ -66,17 +66,17 @@ public class SharedPefManager {
         return new Gson().fromJson(pref.getString("UserModel", null), UserModel.class);
     }
 
-    //===============================================| Your Product
+    //===============================================| Contact Person
     public void saveContact(ContactModel model){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
         ArrayList<ContactModel> mArrayList = new ArrayList<>();
-        ArrayList<ContactModel> products = getContactList();
-        if (products != null) {
+        ArrayList<ContactModel> models = getContactList();
+        if (models != null) {
             if (model != null) {
-                products.add(model);
-                editor.putString("ContactModel", new Gson().toJson(products));
+                models.add(model);
+                editor.putString("ContactModel", new Gson().toJson(models));
             }
         } else {
             mArrayList.add(model);
@@ -91,21 +91,32 @@ public class SharedPefManager {
     }
 
     //===============================================| MeetingModel
-    public void saveMeetingModel(ArrayList<MeetingModel> mArrayList){
+    public void saveMeeting(MeetingModel model){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("MeetingModel", new Gson().toJson(mArrayList));
+
+        ArrayList<MeetingModel> mArrayList = new ArrayList<>();
+        ArrayList<MeetingModel> models = getMeetingList();
+        if (models != null) {
+            if (model != null) {
+                models.add(model);
+                editor.putString("MeetingModel", new Gson().toJson(models));
+            }
+        } else {
+            mArrayList.add(model);
+            editor.putString("MeetingModel", new Gson().toJson(mArrayList));
+        }
         editor.apply();
         editor.commit(); //for old version
     }
-    public ArrayList<MeetingModel> getMeetingModel(){
+    public ArrayList<MeetingModel> getMeetingList(){
         SharedPreferences ref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return new Gson().fromJson(ref.getString("MeetingModel", null), new TypeToken<ArrayList<MeetingModel>>(){}.getType());
     }
-    public void removeMeetingModel(MeetingModel model, int position){
+    public void removeMeeting(MeetingModel model, int position){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        ArrayList<MeetingModel> mArrayList = getMeetingModel();
+        ArrayList<MeetingModel> mArrayList = getMeetingList();
         if (mArrayList != null) {
             if (model != null) {
                 mArrayList.remove(position);
@@ -115,7 +126,7 @@ public class SharedPefManager {
             }
         }
     }
-    public void removeAllMeetingModel(){
+    public void removeAllMeeting(){
         SharedPreferences pre = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pre.edit();
         editor.remove("MeetingModel");
@@ -126,7 +137,7 @@ public class SharedPefManager {
     public void restoreMeetingModel(MeetingModel model){
         SharedPreferences pref = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        ArrayList<MeetingModel> mArrayList = getMeetingModel();
+        ArrayList<MeetingModel> mArrayList = getMeetingList();
         if (mArrayList != null) {
             if (model != null) {
                 mArrayList.add(model);

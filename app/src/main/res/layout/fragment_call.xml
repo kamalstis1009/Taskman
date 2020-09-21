@@ -45,13 +45,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <Spinner
-                android:id="@+id/call_contact"
-                android:entries="@array/client_array"
-                android:background="@drawable/layer_list_spinner"
+            <LinearLayout
+                android:weightSum="5"
+                android:orientation="horizontal"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4">
+                    <Spinner
+                        android:id="@+id/call_contact"
+                        android:entries="@array/client_array"
+                        android:background="@drawable/layer_list_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4">
+                    <ImageButton
+                        android:id="@+id/location_button"
+                        android:background="@drawable/shape_radius_100_edit_text"
+                        android:tint="@color/colorPrimary"
+                        android:src="@drawable/ic_add_black_24dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_width="70dp"
+                        android:layout_height="50dp" />
+                </RelativeLayout>
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/call_type"

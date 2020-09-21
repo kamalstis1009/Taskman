@@ -66,6 +66,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
     private ArrayList<String> mContacts = new ArrayList<>();
     private EditText callDate;
     private Spinner callContact;
+    private CircleImageView contactPhoto;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -208,6 +209,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         builder.create();
         final AlertDialog dialog = builder.show();
 
+        contactPhoto = (CircleImageView) view.findViewById(R.id.person_photo);
         EditText fullName = (EditText) view.findViewById(R.id.full_name);
         EditText email = (EditText) view.findViewById(R.id.email);
         EditText company = (EditText) view.findViewById(R.id.company);
@@ -216,7 +218,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         EditText phone = (EditText) view.findViewById(R.id.phone);
         EditText description = (EditText) view.findViewById(R.id.description);
 
-        ((CircleImageView) view.findViewById(R.id.person_photo)).setOnClickListener(new View.OnClickListener() {
+        contactPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog();
@@ -327,14 +329,14 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         if (requestCode == ACTION_PICK_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
             Uri uri = data.getData();
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
-            //imageView.setImageBitmap(bitmap);
+            contactPhoto.setImageBitmap(bitmap);
             String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName, "persons");
             mFile = new File(mImagePath, mImgName);
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && currentPhotoPath != null) {
             Uri uri = Uri.fromFile(new File(currentPhotoPath));
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
-            //imageView.setImageBitmap(bitmap);
+            contactPhoto.setImageBitmap(bitmap);
             String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName, "persons");
             mFile = new File(mImagePath, mImgName);
         }

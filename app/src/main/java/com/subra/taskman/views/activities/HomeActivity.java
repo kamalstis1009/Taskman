@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.gson.Gson;
 import com.subra.taskman.R;
 import com.subra.taskman.models.CallModel;
 import com.subra.taskman.models.MeetingModel;
@@ -29,6 +31,7 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, TaskAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener, CallFragment.BottomSheetListener {
 
+    private static final String TAG = "HomeActivity";
     private RecyclerView mMeetingRecyclerView;
     private ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
     private MeetingAdapter mMeetingAdapter;
@@ -151,7 +154,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
 
     @Override
     public void onAddItem(CallModel model) {
-        //
+        Log.d(TAG, new Gson().toJson(model));
     }
 
     @Override

@@ -48,7 +48,6 @@ public class RecordForegroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //stopRecording();
         Toast.makeText(this, "Stop Recording", Toast.LENGTH_SHORT).show();
     }
 
@@ -83,6 +82,14 @@ public class RecordForegroundService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void stopForegroundService() {
+        stopRecording();
+        // Stop foreground service and remove the notification.
+        stopForeground(true);
+        // Stop the foreground service.
+        stopSelf();
     }
 
     private void stopRecording() {

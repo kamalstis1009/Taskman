@@ -58,6 +58,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
     private ArrayList<ContactModel> mArrayList = new ArrayList<>();
     private ArrayList<String> mContacts = new ArrayList<>();
     private EditText callDate;
+    private Spinner callContact;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
 
         //------------------------------------------------| findViewById
         Spinner callStatus = (Spinner) view.findViewById(R.id.call_status);
-        Spinner callContact = (Spinner) view.findViewById(R.id.call_contact);
+        callContact = (Spinner) view.findViewById(R.id.call_contact);
         Spinner callType = (Spinner) view.findViewById(R.id.call_type);
         callDate = (EditText) view.findViewById(R.id.call_date);
         EditText callSubject = (EditText) view.findViewById(R.id.call_subject);
@@ -224,6 +225,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 model.setImageName(mFile.getName());
                 model.setImagePath(mFile.getPath());
                 SharedPefManager.getInstance(getActivity()).saveContact(model);
+                getSpinnerData(callContact);
                 dialog.dismiss();
                 //Snackbar.make(getActivity().findViewById(android.R.id.content), "Your vendor's photo did not set", Snackbar.LENGTH_SHORT).show();
             }

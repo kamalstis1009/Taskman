@@ -51,7 +51,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.app.Activity.RESULT_OK;
@@ -241,6 +240,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         }
     }
 
+    //====================================================| RecyclerView
     private void initRecyclerView1(RecyclerView mRecyclerView, ArrayList<FileModel> arrayList) {
         mAttachAdapter = new AttachmentAdapter(arrayList, this);
         mRecyclerView.setAdapter(mAttachAdapter);
@@ -259,7 +259,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         mRecordAdapter.notifyDataSetChanged();
     }
 
-    //====================================================| For Record
+    //====================================================| Check Permissions for Mic, Camera, Gallery
     //@AfterPermissionGranted(REQUEST_RECORD)
     private void recordRequestPermissions() {
         if (EasyPermissions.hasPermissions(getActivity(), RECORD_PERMISSIONS)) {
@@ -318,6 +318,27 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         // Some permissions have been denied
     }
 
+    //====================================================| Permissions Result for Camera, Gallery
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION_PICK_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
+            //imageView.setImageBitmap(bitmap);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
+            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && currentPhotoPath != null) {
+            Uri uri = Uri.fromFile(new File(currentPhotoPath));
+            Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
+            //imageView.setImageBitmap(bitmap);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
+            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
+        }
+    }
+
+    //====================================================| Record Dialog
     private void showRecordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_record, null, false);
@@ -379,7 +400,6 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         context.stopService(new Intent(context, RecordForegroundService.class)); //ForegroundService
     }
 
-    //===============================================| Get all records file from Storage
     private void getInternalStorageFiles() {
         //String path = Environment.getExternalStorageDirectory().toString() + "/Testing"; //getExternalFilesDir(), getExternalCacheDir(), or getExternalMediaDir()
         //String path = this.getApplicationContext().getFilesDir() + "/system_sound"; //file.getAbsolutePath()
@@ -398,7 +418,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     }
 
 
-    //====================================================| For Image
+    //====================================================| Camera and Gallery Dialog
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_photo_upload_option, null, false);
@@ -453,25 +473,6 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private void getGallery() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), ACTION_PICK_REQUEST_CODE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ACTION_PICK_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
-            Uri uri = data.getData();
-            Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
-            //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
-            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
-        }
-        if (requestCode == REQUEST_IMAGE_CAPTURE && currentPhotoPath != null) {
-            Uri uri = Uri.fromFile(new File(currentPhotoPath));
-            Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
-            //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, ConstantKey.IMAGE_NAME);
-            mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
-        }
     }
 
 }

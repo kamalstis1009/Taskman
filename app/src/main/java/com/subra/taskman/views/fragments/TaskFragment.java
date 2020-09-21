@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -92,6 +94,12 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     //findViewById
     private EditText mTitle, mDate, mDescription;
     private Spinner mPriority, mStatus;
+
+    //Record
+    private String mRecordName;
+    private String mRecordFilePath;
+    private boolean isStarted;
+    private MediaRecorder mRecorder;
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -387,8 +395,8 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //new BackTask().execute("start");
-                startMyService(ConstantKey.RECORDING, "START");
+                new BackTask().execute("start");
+                //startMyService(ConstantKey.RECORDING, "START");
                 recordBtn.setEnabled(false);
                 stopBtn.setEnabled(true);
                 TimeCount.getInstance().getCounter(new TimeCount.ShowCounter() {
@@ -402,8 +410,8 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //new BackTask().execute("stop");
-                stopMyService();
+                new BackTask().execute("stop");
+                //stopMyService();
                 recordBtn.setEnabled(true);
                 stopBtn.setEnabled(false);
                 //playBtn.setEnabled(true);
@@ -429,6 +437,65 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private void stopMyService() {
         getActivity().stopService(new Intent(getActivity(), RecordForegroundService.class)); //ForegroundService
+    }
+
+    //===============================================| Recording Task
+    private class BackTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            if (params[0].equals("start")) {
+                try {
+                    String path = getActivity().getFilesDir().getPath();
+                    File file = new File(path, "records"); //child folder
+                    mRecordName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+                    mRecorder = new MediaRecorder();
+                    /*mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+                    mRecorder.setAudioChannels(1);
+                    mRecorder.setAudioSamplingRate(8000);
+                    mRecorder.setAudioEncodingBitRate(44100);
+                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);*/
+
+                    mRecorder.reset();
+                    mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+                    if (!file.exists()){
+                        file.mkdirs();
+                    }
+                    mRecordFilePath = file+"/" + "REC_" + mRecordName + ".3gp";
+                    mRecorder.setOutputFile(mRecordFilePath);
+
+                    mRecorder.prepare();
+                    mRecorder.start();
+                    isStarted = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (params[0].equals("stop")) {
+                if (isStarted && mRecorder != null) {
+                    mRecorder.stop();
+                    mRecorder.reset(); // You can reuse the object by going back to setAudioSource() step
+                    mRecorder.release();
+                    mRecorder = null;
+                    isStarted = false;
+
+                    if (mRecordName != null && mRecordFilePath != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getInternalStorageFiles();
+                            }
+                        });
+
+                    }
+                }
+            }
+            return null;
+        }
     }
 
     //====================================================| Camera and Gallery Dialog

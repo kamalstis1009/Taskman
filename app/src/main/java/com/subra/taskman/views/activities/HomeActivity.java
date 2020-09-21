@@ -26,11 +26,15 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
-public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener {
+public class HomeActivity extends AppCompatActivity implements MeetingAdapter.MyCallBackListener, TaskAdapter.MyCallBackListener, MeetingFragment.BottomSheetListener, TaskFragment.BottomSheetListener {
 
     private RecyclerView mMeetingRecyclerView;
     private ArrayList<MeetingModel> mMeetingList = new ArrayList<>();
     private MeetingAdapter mMeetingAdapter;
+
+    private RecyclerView mTaskRecyclerView;
+    private ArrayList<TaskModel> mTaskList = new ArrayList<>();
+    private TaskAdapter mTaskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +83,8 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         });
 
         //-----------------------------------------------| Task
-        RecyclerView mRecyclerView2 = (RecyclerView) findViewById(R.id.recycler_view_task);
-        initRecyclerView2(mRecyclerView2);
+        mTaskRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_task);
+        initRecyclerView2(mTaskRecyclerView, mTaskList);
         ((ImageButton) findViewById(R.id.add_task_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,13 +118,13 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         mMeetingAdapter.notifyDataSetChanged();
     }
 
-    private void initRecyclerView2(RecyclerView mRecyclerView) {
-        TaskAdapter mAdapter = new TaskAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
+    private void initRecyclerView2(RecyclerView mRecyclerView, ArrayList<TaskModel> arrayList) {
+        mTaskAdapter = new TaskAdapter(arrayList, this);
+        mRecyclerView.setAdapter(mTaskAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5 /*px spacing*/));
-        mAdapter.notifyDataSetChanged();
+        mTaskAdapter.notifyDataSetChanged();
     }
 
     private void initRecyclerView3(RecyclerView mRecyclerView) {
@@ -151,6 +155,18 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
 
     @Override
     public void onAddItem(TaskModel model) {
-        //
+        mTaskList.add(model);
+        mTaskAdapter.notifyItemInserted(mTaskList.size());
+    }
+
+    @Override
+    public void onRemoveItem(int position, TaskModel model) {
+        if (mTaskList != null && mTaskList.size() > 0) {
+            //mArrayList.remove(model);
+            mTaskList.remove(position);
+            mTaskRecyclerView.removeViewAt(position);
+            mTaskAdapter.notifyItemRemoved(position);
+            mTaskAdapter.notifyItemRangeChanged(position, mTaskList.size());
+        }
     }
 }

@@ -20,12 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
-import androidx.lifecycle.Observer;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.snackbar.Snackbar;
 import com.subra.taskman.R;
 import com.subra.taskman.models.CallModel;
 import com.subra.taskman.models.ContactModel;
@@ -77,7 +75,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         Spinner callResult = (Spinner) view.findViewById(R.id.call_result);
         getSpinnerData(callContact);
 
-        ((ImageButton) view.findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
+        ((Button) view.findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String status = callStatus.getSelectedItem().toString();
@@ -160,9 +158,11 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private void getSpinnerData(Spinner spinner) {
         ArrayList<ContactModel> list = SharedPefManager.getInstance(getActivity()).getContactList();
-        mArrayList.addAll(list);
-        for(ContactModel pc : mArrayList) {
-            mContacts.add(pc.getFullName());
+        if (mArrayList != null && mArrayList.size() > 0) {
+            mArrayList.addAll(list);
+            for (ContactModel pc : mArrayList) {
+                mContacts.add(pc.getFullName());
+            }
         }
         CustomDropDownAdapter mAdapter = new CustomDropDownAdapter(getActivity(), mContacts);
         spinner.setAdapter(mAdapter);

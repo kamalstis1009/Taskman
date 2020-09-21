@@ -38,17 +38,18 @@
 
     <string-array name="call_type_array">
         <item>Select Type</item>
-        <item>Personal</item>
-        <item>Client</item>
-        <item>Boss</item>
+        <item>Completed Call</item>
+        <item>Schedule Call</item>
     </string-array>
 
     <string-array name="call_purpose_array">
         <item>Select Purpose</item>
         <item>Prospecting</item>
+        <item>Administrative</item>
         <item>Negotiation</item>
         <item>Demo</item>
         <item>Project</item>
+        <item>Desk</item>
     </string-array>
 
     <string-array name="call_result_array">

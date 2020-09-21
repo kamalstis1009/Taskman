@@ -29,6 +29,11 @@ public class RecordForegroundService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getExtras() != null) {
             if (intent.getExtras().containsKey(ConstantKey.RECORDING)) {

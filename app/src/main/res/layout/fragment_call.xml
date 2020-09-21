@@ -38,6 +38,22 @@
             </RelativeLayout>
 
             <Spinner
+                android:id="@+id/call_status"
+                android:entries="@array/call_status_array"
+                android:background="@drawable/layer_list_spinner"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/call_contact"
+                android:entries="@array/client_array"
+                android:background="@drawable/layer_list_spinner"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
                 android:id="@+id/call_type"
                 android:entries="@array/call_type_array"
                 android:background="@drawable/layer_list_spinner"
@@ -45,16 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <Spinner
-                android:id="@+id/client"
-                android:entries="@array/client_array"
-                android:background="@drawable/layer_list_spinner"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_user_phone_number"
+                android:id="@+id/layout_call_subject"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxCornerRadiusTopStart="25dp"
                 app:boxCornerRadiusTopEnd="25dp"
@@ -63,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/user_name"
+                    android:id="@+id/call_subject"
                     android:inputType="text"
                     android:maxLength="25"
                     android:singleLine="true"
@@ -95,8 +103,8 @@
                 android:layout_height="wrap_content"/>
 
             <Button
-                android:id="@+id/add_product_button"
-                android:text="Add Meeting"
+                android:id="@+id/add_call_button"
+                android:text="Add Call"
                 android:textColor="@color/colorWhite"
                 app:cornerRadius="25dp"
                 android:padding="15dp"

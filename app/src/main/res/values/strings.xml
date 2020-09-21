@@ -36,10 +36,17 @@
         <item>Waiting for Input</item>
     </string-array>
 
-    <string-array name="call_type_array">
-        <item>Select Type</item>
+    <string-array name="call_status_array">
+        <item>Select Status</item>
         <item>Completed Call</item>
         <item>Schedule Call</item>
+    </string-array>
+
+    <string-array name="call_type_array">
+        <item>Select Type</item>
+        <item>Incoming Call</item>
+        <item>Outgoing Call</item>
+        <item>Missed Call</item>
     </string-array>
 
     <string-array name="call_purpose_array">

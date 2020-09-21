@@ -1,5 +1,6 @@
 package com.subra.taskman.services;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaRecorder;
@@ -8,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.subra.taskman.models.FileModel;
 import com.subra.taskman.utils.ConstantKey;
 
 import java.io.File;
@@ -87,7 +87,14 @@ public class RecordForegroundService extends Service {
             mRecorder.release();
             mRecorder = null;
             isStarted = false;
+            publishResults();
         }
+    }
+
+    private void publishResults() {
+        Intent intent = new Intent(ConstantKey.BROADCAST_RECEIVER);
+        intent.putExtra("RECORD_RESULT", Activity.RESULT_OK);
+        sendBroadcast(intent);
     }
 
     /*private void getInternalStorageFiles() {

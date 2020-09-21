@@ -1,9 +1,11 @@
 package com.subra.taskman.views.fragments;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +54,8 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.app.Activity.RESULT_OK;
+
 public class TaskFragment extends BottomSheetDialogFragment implements EasyPermissions.PermissionCallbacks, AttachmentAdapter.MyCallBackListener, RecordAdapter.MyCallBackListener {
 
     private static final String TAG = "TaskFragment";
@@ -84,6 +88,24 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     private String[] RECORD_PERMISSIONS = { android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, };
     private String[] CAMERA_PERMISSIONS = { android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, };
     private String[] GALLERY_PERMISSIONS = { android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,};
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                int resultCode = bundle.getInt("RECORD_RESULT");
+                if (resultCode == RESULT_OK) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getInternalStorageFiles();
+                        }
+                    });
+                }
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -130,6 +152,13 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     public void onResume() {
         super.onResume();
         //getDialog().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getActivity().registerReceiver(receiver, new IntentFilter(ConstantKey.BROADCAST_RECEIVER));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(receiver);
     }
 
     //===============================================| Back pressed dismiss
@@ -444,6 +473,5 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             mFile = new File(mImagePath, ConstantKey.IMAGE_NAME);
         }
     }
-
 
 }

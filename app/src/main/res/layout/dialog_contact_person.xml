@@ -186,7 +186,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/add_contact_button"
+            android:id="@+id/add_person_button"
             android:text="Add Contact"
             android:textColor="@color/colorWhite"
             app:cornerRadius="25dp"

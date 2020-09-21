@@ -228,7 +228,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 showDialog();
             }
         });
-        ((Button) view.findViewById(R.id.add_contact_button)).setOnClickListener(new View.OnClickListener() {
+        ((Button) view.findViewById(R.id.add_person_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = fullName.getText().toString().trim();

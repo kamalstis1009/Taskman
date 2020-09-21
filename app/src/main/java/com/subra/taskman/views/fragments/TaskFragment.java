@@ -354,7 +354,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             Uri uri = data.getData();
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
             //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName, "images");
             mFile = new File(mImagePath, mImgName);
             getInternalStorageImages();
         }
@@ -362,7 +362,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
             Uri uri = Uri.fromFile(new File(currentPhotoPath));
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
             //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName, "images");
             mFile = new File(mImagePath, mImgName);
             getInternalStorageImages();
         }

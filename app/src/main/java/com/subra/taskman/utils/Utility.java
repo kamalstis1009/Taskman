@@ -571,8 +571,8 @@ public class Utility {
         return bitmap;
     }
 
-    public String saveToInternalStorage(Context context, Bitmap bitmapImage, String imageName){
-        File directory = new File(context.getFilesDir() + "/images/");
+    public String saveToInternalStorage(Context context, Bitmap bitmapImage, String imageName, String folder){
+        File directory = new File(context.getFilesDir() + "/" + folder + "/");
         directory.mkdir(); //Create imageDir
         File file = new File(directory, imageName);
         try {

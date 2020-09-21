@@ -236,14 +236,14 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
             Uri uri = data.getData();
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
             //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName, "persons");
             mFile = new File(mImagePath, mImgName);
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && currentPhotoPath != null) {
             Uri uri = Uri.fromFile(new File(currentPhotoPath));
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
             //imageView.setImageBitmap(bitmap);
-            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName);
+            String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName, "persons");
             mFile = new File(mImagePath, mImgName);
         }
     }

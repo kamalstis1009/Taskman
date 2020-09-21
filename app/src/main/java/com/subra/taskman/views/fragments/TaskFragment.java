@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,6 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
     private static final int ACTION_PICK_REQUEST_CODE = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 4;
-
     private static final int REQUEST_RECORD = 101;
     private static final int REQUEST_CAMERA = 102;
     private static final int REQUEST_GALLERY = 103;
@@ -302,13 +302,13 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> permissions) {
         // Some permissions have been granted
-        if (Arrays.equals(permissions.toArray(new String[0]), RECORD_PERMISSIONS)) {
+        if (Arrays.equals(permissions.toArray(new String[0]), RECORD_PERMISSIONS) && requestCode == REQUEST_RECORD) {
             showRecordDialog();
         }
-        if (Arrays.equals(permissions.toArray(new String[0]), CAMERA_PERMISSIONS)) {
+        if (Arrays.equals(permissions.toArray(new String[0]), CAMERA_PERMISSIONS) && requestCode == REQUEST_CAMERA) {
             getCamera();
         }
-        if (Arrays.equals(permissions.toArray(new String[0]), GALLERY_PERMISSIONS)) {
+        if (Arrays.equals(permissions.toArray(new String[0]), GALLERY_PERMISSIONS) && requestCode == REQUEST_GALLERY) {
             getGallery();
         }
     }

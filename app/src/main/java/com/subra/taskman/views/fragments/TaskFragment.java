@@ -198,10 +198,10 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                     dismiss();
                     break;
                 case R.id.task_date :
-                    saveTask();
+                    Utility.getInstance().getDateTimePickerDialog(getActivity(), mDate);
                     break;
                 case R.id.add_attachment_button :
-                    Utility.getInstance().getDateTimePickerDialog(getActivity(), mDate);
+                    showDialog();
                     break;
                 case R.id.add_record_button :
                     recordRequestPermissions();

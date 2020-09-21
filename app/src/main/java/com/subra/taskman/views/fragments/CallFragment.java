@@ -66,6 +66,7 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         //------------------------------------------------| Get Bundle Data
         if (getArguments() != null && getArguments().getString("mDuration") != null) {}
 
+        //------------------------------------------------| findViewById
         Spinner callStatus = (Spinner) view.findViewById(R.id.call_status);
         Spinner callContact = (Spinner) view.findViewById(R.id.call_contact);
         Spinner callType = (Spinner) view.findViewById(R.id.call_type);
@@ -74,7 +75,11 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
         Spinner callPurpose = (Spinner) view.findViewById(R.id.call_purpose);
         Spinner callResult = (Spinner) view.findViewById(R.id.call_result);
         getSpinnerData(callContact);
+        callDate.setOnClickListener(new ActionEventHandler());
+        ((ImageButton) view.findViewById(R.id.add_contact_button)).setOnClickListener(new ActionEventHandler());
+        ((ImageButton) view.findViewById(R.id.back_button)).setOnClickListener(new ActionEventHandler());
 
+        //------------------------------------------------| Add Call
         ((Button) view.findViewById(R.id.add_call_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,9 +106,6 @@ public class CallFragment extends BottomSheetDialogFragment implements EasyPermi
                 model.setResult(result);
             }
         });
-        callDate.setOnClickListener(new ActionEventHandler());
-        ((ImageButton) view.findViewById(R.id.add_contact_button)).setOnClickListener(new ActionEventHandler());
-        ((ImageButton) view.findViewById(R.id.back_button)).setOnClickListener(new ActionEventHandler());
 
         return view;
     }

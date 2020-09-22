@@ -9,7 +9,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.subra.taskman.R;
@@ -17,7 +16,6 @@ import com.subra.taskman.models.MeetingModel;
 import com.subra.taskman.utils.Utility;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHolder> implements Filterable {
 
@@ -91,10 +89,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHo
                 } else {
                     ArrayList<MeetingModel> filterList = new ArrayList<>();
                     for (MeetingModel model : mArrayList1){
-                        /*if (model.getCreatedAt().toLowerCase().contains(charString)){
-                            filterList.add(model);
-                        }*/
-                        if (isWithinRange( Utility.getInstance().getDateFromStringDate(model.getCreatedAt()), Utility.getInstance().getDateFromStringDate(charString) )){
+                        if (Utility.getInstance().getDateFromTimestamp(model.getCreatedAt()).contains(charString)){
                             filterList.add(model);
                         }
                     }
@@ -111,12 +106,6 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHo
                 notifyDataSetChanged();
             }
         };
-    }
-
-    boolean isWithinRange(Date testDate, Date startDate) {
-        //return !(testDate.before(startDate) || testDate.after(endDate));
-        //return testDate.after(startDate) && testDate.before(endDate);
-        return testDate.after(startDate) && testDate.before(startDate);
     }
 
 }

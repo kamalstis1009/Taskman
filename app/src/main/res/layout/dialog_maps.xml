@@ -12,7 +12,7 @@
     <TextView
         android:padding="15dp"
         android:layout_marginTop="35dp"
-        android:text="To change your delivery location"
+        android:text="To change your location"
         android:layout_centerHorizontal="true"
         android:background="@color/colorWhite"
         android:layout_width="wrap_content"

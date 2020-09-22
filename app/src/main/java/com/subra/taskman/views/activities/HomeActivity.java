@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -21,6 +22,7 @@ import com.subra.taskman.views.fragments.CallFragment;
 import com.subra.taskman.views.fragments.MeetingFragment;
 import com.subra.taskman.views.fragments.TaskFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -57,25 +59,22 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         HorizontalCalendar mCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView).range(startDate, endDate).datesNumberOnScreen(5).build();
         mCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
-            public void onDateSelected(Calendar date, int position) {
-            }
+            public void onDateSelected(Calendar date, int position) {}
         });
         mCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
+                if (mMeetingAdapter != null){
+                    mMeetingAdapter.getFilter().filter(new SimpleDateFormat("dd-MM-yyyy").format(date.getTime()));
+                }
             }
             @Override
-            public void onCalendarScroll(HorizontalCalendarView calendarView, int dx, int dy) {
-            }
+            public void onCalendarScroll(HorizontalCalendarView calendarView, int dx, int dy) {}
             @Override
             public boolean onDateLongClicked(Calendar date, int position) {
                 return true;
             }
         });
-
-        /*if (mAdapter != null){
-            mAdapter.getFilter().filter(newText);
-        }*/
 
         //-----------------------------------------------| Meeting
         ArrayList<MeetingModel> mMeetings = SharedPefManager.getInstance(this).getMeetingList();

@@ -3,6 +3,8 @@ package com.subra.taskman.views.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -11,23 +13,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.subra.taskman.R;
 import com.subra.taskman.models.TaskModel;
+import com.subra.taskman.utils.Utility;
 
 import java.util.ArrayList;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> implements Filterable {
 
     //private FragmentActivity mActivity;
     private ArrayList<TaskModel> mArrayList;
+    private ArrayList<TaskModel> mArrayList1;
     private MyCallBackListener mListener;
 
     public interface MyCallBackListener {
-        //void onAddItem(MeetingModel model);
+        //void onAddItem(TaskModel model);
         void onRemoveItem(int position, TaskModel model);
-        //void updateItem(int position, MeetingModel model);
+        //void updateItem(int position, TaskModel model);
     }
 
     public TaskAdapter(ArrayList<TaskModel> arrayList, MyCallBackListener listener) {
         this.mArrayList = arrayList;
+        this.mArrayList1 = arrayList;
         this.mListener = listener;
     }
 
@@ -70,6 +75,37 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             remarks = (TextView) itemView.findViewById(R.id.meeting_remarks);
             date = (TextView) itemView.findViewById(R.id.meeting_date);
         }
+    }
+
+    //http://programmingroot.com/android-recyclerview-search-filter-tutorial-with-example/
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                if (charString.isEmpty()){
+                    mArrayList = mArrayList1;
+                } else {
+                    ArrayList<TaskModel> filterList = new ArrayList<>();
+                    for (TaskModel model : mArrayList1){
+                        if (Utility.getInstance().getDateFromTimestamp(model.getCreatedAt()).contains(charString)){
+                            filterList.add(model);
+                        }
+                    }
+                    mArrayList = filterList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mArrayList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mArrayList = (ArrayList<TaskModel>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 }

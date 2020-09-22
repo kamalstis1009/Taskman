@@ -67,6 +67,12 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
                 if (mMeetingAdapter != null){
                     mMeetingAdapter.getFilter().filter(new SimpleDateFormat("dd-MM-yyyy").format(date.getTime()));
                 }
+                if (mTaskAdapter != null){
+                    mTaskAdapter.getFilter().filter(new SimpleDateFormat("dd-MM-yyyy").format(date.getTime()));
+                }
+                if (mCallAdapter != null){
+                    mCallAdapter.getFilter().filter(new SimpleDateFormat("dd-MM-yyyy").format(date.getTime()));
+                }
             }
             @Override
             public void onCalendarScroll(HorizontalCalendarView calendarView, int dx, int dy) {}

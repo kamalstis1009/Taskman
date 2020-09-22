@@ -168,7 +168,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         mMeetingList.add(model);
         mMeetingAdapter.notifyItemInserted(mMeetingList.size());
         SharedPefManager.getInstance(this).saveMeeting(model);
-        sentEmail( model.getParticipants().toArray(new String[0]), model.getTitle(), model.getRemarks(), null);
+        sentEmail( model.getParticipants().toArray(new String[0]), model.getTitle(), model.getFromDate() + "\n" + model.getToDate() + "\n" + model.getRemarks(), null);
     }
 
     @Override

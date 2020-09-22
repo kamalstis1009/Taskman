@@ -5,11 +5,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.subra.taskman.R;
 import com.subra.taskman.models.CallModel;
 import com.subra.taskman.models.MeetingModel;
@@ -166,6 +168,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         mMeetingList.add(model);
         mMeetingAdapter.notifyItemInserted(mMeetingList.size());
         SharedPefManager.getInstance(this).saveMeeting(model);
+        sentEmail( model.getParticipants().toArray(new String[0]), model.getTitle(), model.getRemarks(), null);
     }
 
     @Override
@@ -215,6 +218,26 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
             mCallAdapter.notifyItemRemoved(position);
             mCallAdapter.notifyItemRangeChanged(position, mCallList.size());
             SharedPefManager.getInstance(this).removeCall(model, position);
+        }
+    }
+
+    //Help: https://www.tutorialspoint.com/android/android_sending_email.htm
+    //Help: https://stackoverflow.com/questions/2264622/android-multiple-email-attachments-using-intent
+    public void sentEmail(String[] cc, String subject, String body, ArrayList<Uri> uris) {
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND_MULTIPLE);
+        intent.setType("text/plain"); //intent.setType("message/rfc822");
+        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{ "kamalstis1009@gmail.com" });
+        intent.putExtra(android.content.Intent.EXTRA_CC, cc);
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, body);
+        if (uris != null) {
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+            //intent.putExtra(Intent.EXTRA_STREAM, uri); //Single file
+        }
+        try {
+            startActivity(Intent.createChooser(intent, "Send email using..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Snackbar.make(this.findViewById(android.R.id.content), "No email clients installed.", Snackbar.LENGTH_SHORT).show();
         }
     }
 }

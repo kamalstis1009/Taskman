@@ -55,6 +55,9 @@
             android:foregroundServiceType="location|microphone"
             tools:node="merge" />
 
+        <!-- Alarm Service -->
+        <receiver android:name=".services.NotificationPublisher" />
+
         <activity android:name=".views.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

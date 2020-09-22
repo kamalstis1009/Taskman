@@ -268,7 +268,7 @@ public class Utility {
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         birth.setText(date + " " + hour + ":" + minute + ":" + mSecond + "." + mMillisecond); //yyyy-MM-dd HH:mm:ss | 2020-07-21 01:57:33.435
                     }
-                }, mHour, mMinute, true);
+                }, mHour, mMinute, false);
                 //mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
             }

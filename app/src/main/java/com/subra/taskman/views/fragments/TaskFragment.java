@@ -402,7 +402,7 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
                 TimeCount.getInstance().getCounter(new TimeCount.ShowCounter() {
                     @Override
                     public void onCallback(int value) {
-                        timer.setText("" + value + " Seconds");
+                        timer.setText("" + value);
                     }
                 });
             }

@@ -71,6 +71,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -177,6 +178,36 @@ public class Utility {
         return String.valueOf(new SimpleDateFormat("dd-MM-yyyy").format(ts)); //java.text.DateFormat.getDateTimeInstance().format(ts.getTime())
     }
 
+    public String getDateFromCSharpDateTime(String input) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(input);
+            return String.valueOf(new SimpleDateFormat("dd-MM-yyyy").format(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Date getDateFromCSharpStringDateTime(String input) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(input);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Date getDateFromStringDate(String input) {
+        try {
+            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(input);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     //get date with your format pattern
     public String getFormatFromStringDate(String pattern, Date date) {
         return new SimpleDateFormat(pattern).format(date); //java.text.DateFormat.getDateTimeInstance().format(ts.getTime())
@@ -280,6 +311,23 @@ public class Utility {
         String monthZero = (month >=10)? Integer.toString(month):String.format("0%s",Integer.toString(month));
         String dayZero = (day >=10)? Integer.toString(day):String.format("0%s",Integer.toString(day));
         return year+"-"+monthZero+"-"+dayZero;
+    }
+
+    public String getCurrentDatPicker(Context context) {
+        DatePicker datePicker = new DatePicker(context);
+        int day = datePicker.getDayOfMonth();
+        int mon = datePicker.getMonth();
+        int year = datePicker.getYear();
+        return day +"/"+ (mon+1) +"/"+ year;
+    }
+
+
+    public String getDatePlus(Context context, int dayPlus) {
+        DatePicker datePicker = new DatePicker(context);
+        int day = datePicker.getDayOfMonth();
+        int mon = datePicker.getMonth();
+        int year = datePicker.getYear();
+        return day+dayPlus +"/"+ (mon+1) +"/"+ year;
     }
 
     //====================================================| Checkbox

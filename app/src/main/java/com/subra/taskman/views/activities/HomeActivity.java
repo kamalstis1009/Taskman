@@ -54,10 +54,7 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
         startDate.add(Calendar.MONTH, -1);
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
-        HorizontalCalendar mCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
-                .range(startDate, endDate)
-                .datesNumberOnScreen(5)
-                .build();
+        HorizontalCalendar mCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView).range(startDate, endDate).datesNumberOnScreen(5).build();
         mCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
@@ -75,6 +72,10 @@ public class HomeActivity extends AppCompatActivity implements MeetingAdapter.My
                 return true;
             }
         });
+
+        /*if (mAdapter != null){
+            mAdapter.getFilter().filter(newText);
+        }*/
 
         //-----------------------------------------------| Meeting
         ArrayList<MeetingModel> mMeetings = SharedPefManager.getInstance(this).getMeetingList();

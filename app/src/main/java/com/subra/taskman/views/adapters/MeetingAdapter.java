@@ -3,6 +3,8 @@ package com.subra.taskman.views.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -12,13 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.subra.taskman.R;
 import com.subra.taskman.models.MeetingModel;
+import com.subra.taskman.utils.Utility;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHolder> {
+public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHolder> implements Filterable {
 
     //private FragmentActivity mActivity;
     private ArrayList<MeetingModel> mArrayList;
+    private ArrayList<MeetingModel> mArrayList1;
     private MyCallBackListener mListener;
 
     public interface MyCallBackListener {
@@ -29,6 +34,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHo
 
     public MeetingAdapter(ArrayList<MeetingModel> arrayList, MyCallBackListener listener) {
         this.mArrayList = arrayList;
+        this.mArrayList1 = arrayList;
         this.mListener = listener;
     }
 
@@ -71,6 +77,46 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHo
             remarks = (TextView) itemView.findViewById(R.id.meeting_remarks);
             date = (TextView) itemView.findViewById(R.id.meeting_date);
         }
+    }
+
+    //http://programmingroot.com/android-recyclerview-search-filter-tutorial-with-example/
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                if (charString.isEmpty()){
+                    mArrayList = mArrayList1;
+                } else {
+                    ArrayList<MeetingModel> filterList = new ArrayList<>();
+                    for (MeetingModel model : mArrayList1){
+                        /*if (model.getCreatedAt().toLowerCase().contains(charString)){
+                            filterList.add(model);
+                        }*/
+                        if (isWithinRange( Utility.getInstance().getDateFromStringDate(model.getCreatedAt()), Utility.getInstance().getDateFromStringDate(charString) )){
+                            filterList.add(model);
+                        }
+                    }
+                    mArrayList = filterList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mArrayList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mArrayList = (ArrayList<MeetingModel>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    boolean isWithinRange(Date testDate, Date startDate) {
+        //return !(testDate.before(startDate) || testDate.after(endDate));
+        //return testDate.after(startDate) && testDate.before(endDate);
+        return testDate.after(startDate) && testDate.before(startDate);
     }
 
 }

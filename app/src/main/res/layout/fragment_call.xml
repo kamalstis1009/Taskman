@@ -94,7 +94,7 @@
                     android:id="@+id/call_date"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:hint="From Date"
+                    android:hint="Date"
                     android:drawableTint="@color/colorDeepGrey"
                     android:drawableEnd="@drawable/ic_baseline_date_range_24"
                     android:background="@drawable/shape_radius_100_edit_text"

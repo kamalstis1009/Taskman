@@ -6,15 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -356,11 +355,11 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
 
     //====================================================| Permissions Result for Camera, Gallery
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         String mImgName = "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg";
-        if (requestCode == ACTION_PICK_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
-            Uri uri = data.getData();
+        if (requestCode == ACTION_PICK_REQUEST_CODE && resultCode == getActivity().RESULT_OK && intent != null) {
+            Uri uri = intent.getData();
             Bitmap bitmap = Utility.getInstance().getDownBitmap(getActivity(), uri, 250, 250);
             //imageView.setImageBitmap(bitmap);
             String mImagePath = Utility.getInstance().saveToInternalStorage(getActivity(), bitmap, mImgName, "images");
@@ -525,18 +524,16 @@ public class TaskFragment extends BottomSheetDialogFragment implements EasyPermi
     private void getCamera() {
         if (getActivity() != null) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                try {
-                    File photoFile = createImageFile();
-                    if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", photoFile); //BuildConfig.APPLICATION_ID || getActivity().getOpPackageName()
-                        //Log.d(TAG, "Image Uri: " + photoURI);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+            try {
+                File photoFile = createImageFile();
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", photoFile); //BuildConfig.APPLICATION_ID || getActivity().getOpPackageName()
+                    //Log.d(TAG, "Image Uri: " + photoURI);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
                 }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

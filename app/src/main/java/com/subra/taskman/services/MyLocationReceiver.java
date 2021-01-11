@@ -53,7 +53,9 @@ public class MyLocationReceiver extends BroadcastReceiver {
                         mSnackBar.show();
                     }
                     Log.d(TAG, "GPS is disabled");
-                    mListener.onLocation(false);
+                    if (mListener != null) {
+                        mListener.onLocation(false);
+                    }
                 }
             }
         }
